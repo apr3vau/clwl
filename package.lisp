@@ -1,7 +1,6 @@
-(defpackage "WL"
+(cl:defpackage "WL"
   (:use :cffi))
-
-(in-package "WL")
+(cl:in-package "WL")
 
 (define-foreign-library libwayland-server
   (:unix (:or "libwayland-server.so"))
@@ -27,5 +26,31 @@
          ,@args)
        (cl:export ',lisp-name))))
 
-(defpackage "WLR"
+(cl:defpackage "WLR"
   (:use :cl :cffi :alexandria :anaphora))
+(cl:in-package "WLR")
+
+(define-foreign-library libwlroots
+  (:unix (:or "libwlroots-0.19.so" "libwlroots-0.20.so" "libwlroots-0.18.so")))
+
+(use-foreign-library libwayland-server)
+
+(defmacro define-wlr-events-struct (name &body signals)
+  (let ((struct-name (intern (concatenate 'string (symbol-name name) "-EVENTS") "WLR")))
+    `(defcstruct ,struct-name
+       ,@(loop for signal in signals
+               collect `(,signal (:struct wl:signal))))))
+
+(defmacro define-wlr-func (object suffix ret-type &body args)
+  (let* ((object-str (translate-underscore-separated-name object))
+         (suffix-str (translate-underscore-separated-name suffix))
+         (c-name (concatenate 'string "wlr_" object-str "_" suffix-str))
+         (lisp-name (intern (concatenate
+                             'string
+                             (symbol-name object) "-" (symbol-name suffix))
+                            "WLR")))
+    `(eval-when (:compile-toplevel :load-toplevel :execute)
+       (defcfun (,c-name ,lisp-name) ,ret-type
+         (,object :pointer)
+         ,@args)
+       (export ',lisp-name))))

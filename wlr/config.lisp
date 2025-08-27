@@ -1,0 +1,12 @@
+(in-package "WLR")
+
+(defvar *has-drm-backend* 1)
+(defvar *has-libinput-backend* 1)
+(defvar *has-x11-backend* 1)
+(defvar *has-gles2-renderer* 1)
+(defvar *has-vulkan-renderer* 1)
+(defvar *has-gbm-allocator* 1)
+(defvar *has-udmabuf-allocator* 1)
+(defvar *has-xwayland* 1)
+(defvar *has-session* 1)
+(defvar *has-color-management* 0)
