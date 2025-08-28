@@ -1,8 +1,8 @@
 (cl:in-package "WLR")
 
-(defcstruct backend-output-state
-  (output :pointer)
-  (base (:struct output-state)))
+;; (defcstruct backend-output-state
+;;   (output :pointer)
+;;   (base (:struct output-state)))
 
 (defcstruct backend-features
   (timeline :bool))

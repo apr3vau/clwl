@@ -43,3 +43,5 @@
 
 (defcfun ("wlr_drm_connector_get_panel_orientation" drm-connector-get-panel-orientation) :int
   (output :pointer))
+
+(export '(drm-connector-add-mode drm-mode-get-info drm-connector-get-panel-orientation))

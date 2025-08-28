@@ -26,6 +26,9 @@
          ,@args)
        (cl:export ',lisp-name))))
 
+(cl:eval-when (:compile-toplevel :load-toplevel :execute)
+ (cl:export '(signal libwayland-server libwayland-client)))
+
 (cl:defpackage "WLR"
   (:use :cl :cffi :alexandria :anaphora))
 (cl:in-package "WLR")
@@ -33,7 +36,7 @@
 (define-foreign-library libwlroots
   (:unix (:or "libwlroots-0.19.so" "libwlroots-0.20.so" "libwlroots-0.18.so")))
 
-(use-foreign-library libwayland-server)
+(use-foreign-library wl:libwayland-server)
 
 (defmacro define-wlr-events-struct (name &body signals)
   (let ((struct-name (intern (concatenate 'string (symbol-name name) "-EVENTS") "WLR")))
