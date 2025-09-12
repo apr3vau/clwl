@@ -27,7 +27,7 @@
        (cl:export ',lisp-name))))
 
 (cl:eval-when (:compile-toplevel :load-toplevel :execute)
- (cl:export '(signal libwayland-server libwayland-client)))
+ (cl:export '(signal listener libwayland-server libwayland-client)))
 
 (cl:defpackage "WLR"
   (:use :cl :cffi :alexandria :anaphora))
@@ -40,9 +40,17 @@
 
 (defmacro define-wlr-events-struct (name &body signals)
   (let ((struct-name (intern (concatenate 'string (symbol-name name) "-EVENTS") "WLR")))
+    `(eval-when (:compile-toplevel :load-toplevel :execute)
+       (defcstruct ,struct-name
+         ,@(loop for signal in signals
+                 collect `(,signal (:struct wl:signal))))
+       (export ',struct-name))))
+
+(defmacro define-wlr-private-listener (name &body listeners)
+  (let ((struct-name (intern (concatenate 'string (symbol-name name) "-PRIVATE") "WLR")))
     `(defcstruct ,struct-name
-       ,@(loop for signal in signals
-               collect `(,signal (:struct wl:signal))))))
+       ,@(loop for listener in listeners
+               collect `(,listener (:struct wl:listener))))))
 
 (defmacro define-wlr-func (object suffix ret-type &body args)
   (let* ((object-str (translate-underscore-separated-name object))

@@ -11,8 +11,7 @@
 
 (define-wlr-events-struct session active add-drm-card destroy)
 
-(defcstruct session-private
-  (event-loop-destroy (:struct wl:listener)))
+(define-wlr-private-listener session event-loop-destroy)
 
 (defcstruct session
   (active :bool)
