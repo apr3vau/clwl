@@ -191,14 +191,18 @@
   (:hw-completion 4)
   (:zero-copy 8))
 
-;; (defcstruct output-event-present
-;;   (output :pointer)
-;;   (commit-seq :uint32)
-;;   (presented :bool)
-;;   (timespec (:struct timespec))
-;;   (seq :unsigned)
-;;   (refresh :int)
-;;   (flags :uint32))
+(defcstruct timespec
+  (:tv-sec :long)
+  (:tv-nsec :long))
+
+(defcstruct output-event-present
+  (:output :pointer)
+  (:commit-seq :uint32)
+  (:presented :bool)
+  (:when (:struct timespec))
+  (:seq :unsigned-int)
+  (:refresh :int)
+  (:flags :uint32))
 
 (defcstruct output-event-bind
   (:output :pointer)
@@ -268,9 +272,7 @@
 (define-wlr-func output is-direct-scanout-allowed :bool)
 
 
-(defcfun ("wlr_output_cursor_create" output-cursor-create) :pointer
-  (output :pointer))
-(export 'output-cursor-create)
+(define-wlr-func output cursor-create :pointer)
 
 (define-wlr-func output-cursor set-buffer :bool
   (buffer :pointer)
