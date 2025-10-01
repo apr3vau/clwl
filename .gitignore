@@ -1,2 +1,23 @@
-.DS_Store
+# Compiled Common Lisp artifacts
 *.fasl
+*.FASL
+*.x86f
+*.ufsl
+*.dfsl
+*.fsl
+
+# Editor backups and swap files
+*~
+.#*
+*.swp
+*.swo
+
+# IDE settings
+.vscode/
+.idea/
+
+# macOS metadata
+.DS_Store
+
+# Windows metadata
+Thumbs.db
