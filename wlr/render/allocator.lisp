@@ -1,8 +1,8 @@
 (in-package "WLR")
 
 (defcstruct allocator-interface
-  (create-buffer :pointer)
-  (destroy :pointer))
+  (:create-buffer :pointer)
+  (:destroy :pointer))
 
 (define-wlr-func allocator init :void
   (impl (:pointer (:struct allocator-interface)))
@@ -11,9 +11,9 @@
 (define-wlr-events-struct allocator destroy)
 
 (defcstruct allocator
-  (impl (:pointer (:struct allocator-interface)))
-  (buffer-caps :uint32)
-  (events (:struct allocator-events)))
+  (:impl (:pointer (:struct allocator-interface)))
+  (:buffer-caps :uint32)
+  (:events (:struct allocator-events)))
 
 (defcfun ("wlr_allocator_autocreate" allocator-autocreate) :pointer
   (backend :pointer)

@@ -99,7 +99,7 @@
 (cl:defun registry-bind (registry name interface version)
   (proxy-marshal-flags registry *registry-bind* interface version 0
                        :uint32 name
-                       :string (foreign-slot-value interface 'interface :name)
+                       :string (foreign-slot-value interface '(:struct interface) :name)
                        :uint32 version
                        :pointer (null-pointer)))
 

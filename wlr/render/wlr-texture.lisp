@@ -1,18 +1,18 @@
 (in-package "WLR")
 
 (defcstruct texture
-  (impl :pointer)
-  (width :uint32)
-  (height :uint32)
-  (renderer :pointer))
+  (:impl :pointer)
+  (:width :uint32)
+  (:height :uint32)
+  (:renderer :pointer))
 
 (defcstruct texture-read-pixels-options
-  (data :pointer)
-  (format :uint32)
-  (stride :uint32)
-  (dst-x :uint32)
-  (dst-y :uint32)
-  (src-box (:struct box)))
+  (:data :pointer)
+  (:format :uint32)
+  (:stride :uint32)
+  (:dst-x :uint32)
+  (:dst-y :uint32)
+  (:src-box (:struct box)))
 
 (define-wlr-func texture read-pixels :bool
   (options :pointer))

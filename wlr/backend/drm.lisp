@@ -3,11 +3,11 @@
 (define-wlr-events-struct drm-lease destroy)
 
 (defcstruct drm-lease
-  (fd :int)
-  (lessee-id :uint32)
-  (drm-backend :pointer)
-  (events (:struct drm-lease-events))
-  (data :pointer))
+  (:fd :int)
+  (:lessee-id :uint32)
+  (:drm-backend :pointer)
+  (:events (:struct drm-lease-events))
+  (:data :pointer))
 
 (defcfun ("wlr_drm_backend_create" drm-backend-create) :pointer
   (session :pointer)

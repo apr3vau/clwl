@@ -15,9 +15,9 @@
 (define-wlr-events-struct input-device destroy)
 
 (defcstruct input-device
-  (type :int)
-  (name :string)
-  (events (:struct input-device-events))
-  (data :pointer))
+  (:type :int)
+  (:name :string)
+  (:events (:struct input-device-events))
+  (:data :pointer))
 
 (export '(button-state input-device-type input-device))

@@ -30,7 +30,7 @@
  (cl:export '(signal listener libwayland-server libwayland-client)))
 
 (cl:defpackage "WLR"
-  (:use :cl :cffi :alexandria :anaphora))
+  (:use :cl :cffi))
 (cl:in-package "WLR")
 
 (define-foreign-library libwlroots
@@ -43,14 +43,16 @@
     `(eval-when (:compile-toplevel :load-toplevel :execute)
        (defcstruct ,struct-name
          ,@(loop for signal in signals
-                 collect `(,signal (:struct wl:signal))))
+                 collect `(,(cl:intern (cl:symbol-name signal) "KEYWORD")
+                            (:struct wl:signal))))
        (export ',struct-name))))
 
 (defmacro define-wlr-private-listener (name &body listeners)
   (let ((struct-name (intern (concatenate 'string (symbol-name name) "-PRIVATE") "WLR")))
     `(defcstruct ,struct-name
        ,@(loop for listener in listeners
-               collect `(,listener (:struct wl:listener))))))
+               collect `(,(cl:intern (cl:symbol-name listener) "KEYWORD")
+                          (:struct wl:listener))))))
 
 (defmacro define-wlr-func (object suffix ret-type &body args)
   (let* ((object-str (translate-underscore-separated-name object))

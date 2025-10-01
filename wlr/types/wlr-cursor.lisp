@@ -27,11 +27,11 @@
   tablet-tool-button)
 
 (defcstruct cursor
-  (state :pointer)
-  (x :double)
-  (y :double)
-  (events (:struct cursor-events))
-  (data :pointer))
+  (:state :pointer)
+  (:x :double)
+  (:y :double)
+  (:events (:struct cursor-events))
+  (:data :pointer))
 
 (defcfun ("wlr_cursor_create" cursor-create) :pointer)
 (export 'cursor-create)

@@ -1,16 +1,16 @@
 (in-package "WLR")
 
 (defcstruct box
-  (x :int)
-  (y :int)
-  (width :int)
-  (height :int))
+  (:x :int)
+  (:y :int)
+  (:width :int)
+  (:height :int))
 
 (defcstruct fbox
-  (x :double)
-  (y :double)
-  (width :double)
-  (height :double))
+  (:x :double)
+  (:y :double)
+  (:width :double)
+  (:height :double))
 
 (define-wlr-func box closest-point :void
   (x :double)

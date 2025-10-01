@@ -3,17 +3,17 @@
 (define-wlr-events-struct renderer destroy lost)
 
 (defcstruct renderer-features
-  (output-color-transform :bool)
-  (timeline :bool))
+  (:output-color-transform :bool)
+  (:timeline :bool))
 
 (defcstruct renderer-private
-  (impl :pointer))
+  (:impl :pointer))
 
 (defcstruct renderer
-  (render-buffer-caps :uint32)
-  (events (:struct renderer-events))
-  (features (:struct renderer-features))
-  (private (:struct renderer-private)))
+  (:render-buffer-caps :uint32)
+  (:events (:struct renderer-events))
+  (:features (:struct renderer-features))
+  (:private (:struct renderer-private)))
 
 (defcfun ("wlr_renderer_autocreate" renderer-autocreate) :pointer
   (backend :pointer))
