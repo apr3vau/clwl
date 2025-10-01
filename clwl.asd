@@ -22,6 +22,15 @@
                (:file "wlr/types/wlr-output")
                (:file "wlr/types/wlr-input-device")
                (:file "wlr/types/wlr-cursor")
+               (:file "wlr/types/wlr-keyboard")
+               (:file "wlr/types/wlr-pointer")
+               (:file "wlr/types/wlr-seat")
+               (:file "wlr/types/wlr-data-device")
+               (:file "wlr/types/wlr-output-layout")
+               (:file "wlr/types/wlr-scene")
+               (:file "wlr/types/wlr-subcompositor")
+               (:file "wlr/types/wlr-xcursor-manager")
+               (:file "wlr/types/wlr-xdg-shell")
 
                (:file "wlr/config")
 
