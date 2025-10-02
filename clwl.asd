@@ -5,6 +5,7 @@
                (:file "wl/wayland-util")
                (:file "wl/wayland-server")
                (:file "wl/wayland-client")
+               (:file "wl/wayland-server-protocol")
                (:file "wl/wayland-client-protocol")))
 
 (asdf:defsystem clwlr
