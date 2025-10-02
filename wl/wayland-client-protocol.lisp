@@ -1,30 +1,5 @@
 (cl:in-package "WL")
 
-(cl:defmacro define-wl-interface (name)
-  (cl:let ((foreign-name (cl:concatenate
-                          'cl:string
-                          "wl_" (translate-underscore-separated-name name) "_interface"))
-           (lisp-name (cl:intern
-                       (cl:concatenate 'cl:string
-                                       "*" (cl:symbol-name name) "-INTERFACE*"))))
-    `(cl:eval-when (:compile-toplevel :load-toplevel :execute)
-       (cl:define-symbol-macro ,lisp-name (foreign-symbol-pointer ,foreign-name))
-       (cl:export ',lisp-name))))
-
-(cl:defmacro define-wl-proxy-func (name func-name cl:&body args)
-  (cl:let ((proxy-name (cl:intern
-                        (cl:concatenate 'cl:string
-                                        "PROXY-" (cl:symbol-name func-name))))
-           (lisp-name (cl:intern
-                       (cl:concatenate
-                        'cl:string
-                        (cl:symbol-name name) "-" (cl:symbol-name func-name)))))
-    `(cl:eval-when (:compile-toplevel :load-toplevel :execute)
-       (cl:defun ,lisp-name (,name ,@args)
-         (cl:declare (cl:inline ,lisp-name))
-         (,proxy-name ,name ,@args))
-       (cl:export ',lisp-name))))
-
 (define-wl-interface display)
 (define-wl-interface registry)
 (define-wl-interface callback)
