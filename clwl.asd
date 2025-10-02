@@ -28,6 +28,7 @@
                (:file "wlr/types/wlr-data-device")
                (:file "wlr/types/wlr-output-layout")
                (:file "wlr/types/wlr-scene")
+               (:file "wlr/types/wlr-compositor")
                (:file "wlr/types/wlr-subcompositor")
                (:file "wlr/types/wlr-xcursor-manager")
                (:file "wlr/types/wlr-xdg-shell")
