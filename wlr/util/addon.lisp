@@ -18,6 +18,8 @@
   (:impl :pointer)
   (:private (:struct addon-private)))
 
+(export '(addon-set-private addon-set addon-interface addon-private addon))
+
 (define-wlr-func addon-set init :void)
 (define-wlr-func addon-set finish :void)
 

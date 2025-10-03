@@ -193,6 +193,29 @@
   (:old-surface :pointer)
   (:new-surface :pointer))
 
+(export '(serial-range
+          serial-ringset
+          seat-client-value120
+          seat-client
+          touch-point
+          pointer-grab-interface
+          keyboard-grab-interface
+          touch-grab-interface
+          seat-touch-grab
+          seat-keyboard-grab
+          seat-pointer-grab
+          seat-pointer-button
+          seat-pointer-state
+          seat-keyboard-state
+          seat-touch-state
+          seat
+          seat-pointer-request-set-cursor-event
+          seat-request-set-selection-event
+          seat-request-set-primary-selection-event
+          seat-request-start-drag-event
+          seat-pointer-focus-change-event
+          seat-keyboard-focus-change-event))
+
 (defcfun ("wlr_seat_create" seat-create) :pointer
   (display :pointer)
   (name :string))

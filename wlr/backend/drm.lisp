@@ -8,6 +8,7 @@
   (:drm-backend :pointer)
   (:events (:struct drm-lease-events))
   (:data :pointer))
+(export 'drm-lease)
 
 (defcfun ("wlr_drm_backend_create" drm-backend-create) :pointer
   (session :pointer)

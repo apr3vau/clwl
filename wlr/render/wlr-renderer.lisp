@@ -15,6 +15,8 @@
   (:features (:struct renderer-features))
   (:private (:struct renderer-private)))
 
+(export '(renderer-features renderer-private renderer))
+
 (defcfun ("wlr_renderer_autocreate" renderer-autocreate) :pointer
   (backend :pointer))
 (export 'renderer-autocreate)

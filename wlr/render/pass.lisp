@@ -47,5 +47,7 @@
   (:cliip :pointer)
   (:blend-mode :int))
 
+(export '(buffer-pass-options renderer-texture-options render-color render-rect-options))
+
 (define-wlr-func render-pass add-rect :void
   (options :pointer))

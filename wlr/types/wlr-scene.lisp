@@ -64,6 +64,8 @@
   (:output :pointer)
   (:direct-scanout :bool))
 
+(export '(damage-ring-private damage-ring scene-outputs-update-event scene-output-sample-event))
+
 (define-wlr-events-struct scene-buffer
   outputs-update
   output-enter

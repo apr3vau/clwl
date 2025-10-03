@@ -12,6 +12,8 @@
   (:width :double)
   (:height :double))
 
+(export '(box fbox))
+
 (define-wlr-func box closest-point :void
   (x :double)
   (y :double)

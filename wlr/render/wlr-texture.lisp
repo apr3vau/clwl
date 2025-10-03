@@ -14,6 +14,8 @@
   (:dst-y :uint32)
   (:src-box (:struct box)))
 
+(export '(texture texture-read-pixels-options))
+
 (define-wlr-func texture read-pixels :bool
   (options :pointer))
 

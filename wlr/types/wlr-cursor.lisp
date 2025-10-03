@@ -32,6 +32,7 @@
   (:y :double)
   (:events (:struct cursor-events))
   (:data :pointer))
+(export 'cursor)
 
 (defcfun ("wlr_cursor_create" cursor-create) :pointer)
 (export 'cursor-create)

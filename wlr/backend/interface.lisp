@@ -6,6 +6,7 @@
   (:get-drm-fd :pointer)
   (:test :pointer)
   (:commit :pointer))
+(export 'backend-impl)
 
 (define-wlr-func backend init :void
   (impl :pointer))

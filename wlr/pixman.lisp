@@ -19,3 +19,5 @@
 (defcstruct pixman-region32
   (extents (:struct pixman-box32))
   (data (:pointer (:struct pixman-region32-data))))
+
+(export '(pixman-region32-data pixman-rectangle32 pixman-box32 pixman-region32))

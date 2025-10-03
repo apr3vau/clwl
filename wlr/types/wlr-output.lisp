@@ -212,6 +212,19 @@
   (:output :pointer)
   (:state :pointer))
 
+(export '(output-mode
+          output-cursor
+          output-state-custom-mode
+          output-state
+          output
+          output-event-damage
+          output-event-precommit
+          output-event-commit
+          timespec
+          output-event-present
+          output-event-bind
+          output-event-request-state))
+
 
 (define-wlr-func output create-global :void
   (display :pointer))

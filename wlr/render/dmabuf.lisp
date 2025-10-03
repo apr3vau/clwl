@@ -11,6 +11,8 @@
   (:stride :uint32 :count 4)
   (:fd :int :count 4))
 
+(export 'dmabuf-attributes)
+
 (define-wlr-func dmabuf-attributes finish :void)
 
 (define-wlr-func dmabuf-attributes copy :bool

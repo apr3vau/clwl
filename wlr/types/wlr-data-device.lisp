@@ -100,6 +100,15 @@
   (:drag :pointer)
   (:time :uint32))
 
+(export '(data-device-manager
+          data-offer
+          data-source-impl
+          data-source
+          drag-icon
+          drag
+          drag-motion-event
+          drag-drop-event))
+
 (defcfun ("wlr_data_device_manager_create" data-device-manager-create) :pointer
   (display :pointer))
 (export 'data-device-manager-create)

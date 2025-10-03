@@ -365,4 +365,27 @@
 
 (define-wlr-func xdg-surface schedule-configure :uint32)
 
-(export '(xdg-shell xdg-client xdg-positioner-rules xdg-positioner xdg-popup xdg-popup-grab xdg-surface xdg-toplevel xdg-toplevel-state xdg-toplevel-configure xdg-toplevel-move-event xdg-toplevel-resize-event xdg-toplevel-show-window-menu-event xdg-popup-configure xdg-surface-configure xdg-surface-state))
+(export '(xdg-shell
+          xdg-client
+          xdg-positioner-rules
+          xdg-positioner
+          xdg-positioner-size
+          xdg-positioner-offset
+          xdg-popup
+          xdg-popup-state
+          xdg-popup-private
+          xdg-popup-grab
+          xdg-surface
+          xdg-surface-private
+          xdg-surface-configure
+          xdg-surface-state
+          xdg-toplevel
+          xdg-toplevel-state
+          xdg-toplevel-configure
+          xdg-toplevel-bounds
+          xdg-toplevel-requested
+          xdg-toplevel-private
+          xdg-toplevel-move-event
+          xdg-toplevel-resize-event
+          xdg-toplevel-show-window-menu-event
+          xdg-popup-configure))

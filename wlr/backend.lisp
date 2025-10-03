@@ -15,6 +15,8 @@
   (:features (:struct backend-features))
   (:events (:struct backend-events)))
 
+(export '(backend-output-state backend-features backend))
+
 (defcfun ("wlr_backend_autocreate" backend-autocreate) :pointer
   (event-loop :pointer)
   (session-ptr :pointer))

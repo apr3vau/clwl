@@ -8,6 +8,7 @@
   (:dev :unsigned-long)
   (:link (:struct wl:list))
   (:events (:struct device-events)))
+(export 'device)
 
 (define-wlr-events-struct session active add-drm-card destroy)
 
@@ -24,9 +25,11 @@
   (:event-loop :pointer)
   (:events (:struct session-events))
   (:private (:struct session-private)))
+(export 'session)
 
 (defcstruct session-add-event
   (:path :string))
+(export 'session-add-event)
 
 (defcenum device-change-type
   (:hotplug 1)
@@ -35,6 +38,7 @@
 (defcstruct device-hotplug-event
   (:connector-id :uint32)
   (:prop-id :uint32))
+(export 'device-hotplug-event)
 
 (defcunion device-hotplug-union
   (hotplug (:struct device-hotplug-event)))
@@ -42,6 +46,7 @@
 (defcstruct device-change-event
   (:type :int)
   (:union (:union device-hotplug-union)))
+(export 'device-change-event)
 
 (defcfun ("wlr_session_create" session-create) :pointer
   (event-loop :pointer))

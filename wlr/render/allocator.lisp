@@ -15,6 +15,8 @@
   (:buffer-caps :uint32)
   (:events (:struct allocator-events)))
 
+(export '(allocator-interface allocator))
+
 (defcfun ("wlr_allocator_autocreate" allocator-autocreate) :pointer
   (backend :pointer)
   (renderer :pointer))

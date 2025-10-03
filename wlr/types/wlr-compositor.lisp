@@ -135,6 +135,17 @@
   (:events (:struct compositor-events))
   (:private (:struct compositor-private)))
 
+(export '(surface-state-viewport
+          surface-state
+          surface-role
+          surface-output
+          surface-private-previous
+          surface-private
+          surface
+          surface-synced-impl
+          surface-synced
+          compositor))
+
 (defctype surface-iterator-func :pointer)
 
 (define-wlr-func surface set-role :bool
