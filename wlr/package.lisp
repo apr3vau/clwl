@@ -36,3 +36,10 @@
          (,object :pointer)
          ,@args)
        (export ',lisp-name))))
+
+(defmacro event-signal (object type-name slot-name)
+  (let ((events-type-name (intern (concatenate 'string (symbol-name type-name) "-EVENTS") "WLR")))
+    `(cffi:foreign-slot-value (cffi:foreign-slot-value ,object '(:struct ,type-name) :events)
+                              '(:struct ,events-type-name)
+                              ,slot-name)))
+(export 'event-signal)
