@@ -376,6 +376,255 @@
   (:current #x1)
   (:preferred #x2))
 
+(defcenum subcompositor-error
+  (:bad-surface 0)
+  (:bad-parent 1))
+
+(defcenum subsurface-error
+  (:bad-surface 0))
+
+(cl:defun %enum-value (enum value)
+  (cl:cond
+    ((cl:integerp value) value)
+    ((cl:keywordp value)
+     (cl:ignore-errors (foreign-enum-value enum value)))
+    (cl:t cl:nil)))
+
+(cl:defun display-error-is-valid (value version)
+  (cl:let ((code (%enum-value 'display-error value)))
+    (cl:when code
+      (cl:case code
+        ((0 1 2 3) (cl:>= version 1))
+        (cl:otherwise cl:nil)))))
+
+(cl:defun shm-error-is-valid (value version)
+  (cl:let ((code (%enum-value 'shm-error value)))
+    (cl:when code
+      (cl:case code
+        ((0 1 2) (cl:>= version 1))
+        (cl:otherwise cl:nil)))))
+
+(cl:defun shm-format-is-valid (value version)
+  (cl:let ((code (%enum-value 'shm-format value)))
+    (cl:when code
+      (cl:case code
+        ((0 1
+          #x20203843 #x38424752 #x38524742 #x32315258 #x32314258 #x32315852 #x32315842 #x32315241 #x32314241
+          #x32314152 #x32314142 #x35315258 #x35314258 #x35315852 #x35315842 #x35315241 #x35314241 #x35314152
+          #x35314142 #x36314752 #x36314742 #x34324752 #x34324742 #x34324258 #x34325852 #x34325842 #x34324241
+          #x34324152 #x34324142 #x30335258 #x30334258 #x30335852 #x30335842 #x30335241 #x30334241 #x30334152
+          #x30334142 #x56595559 #x55595659 #x59565955 #x59555956 #x56555941 #x3231564E #x3132564E #x3631564E
+          #x3136564E #x39565559 #x39555659 #x31315559 #x31315659 #x32315559 #x32315659 #x36315559 #x36315659
+          #x34325559 #x34325659 #x20203852 #x20363152 #x38384752 #x38385247 #x32334752 #x32335247 #x48345258
+          #x48344258 #x48345241 #x48344241 #x56555958 #x34325556 #x30335556 #x30313259 #x32313259 #x36313259
+          #x30313459 #x32313459 #x36313459 #x30335658 #x36335658 #x38345658 #x304C3059 #x304C3058 #x324C3059
+          #x324C3058 #x38305559 #x30315559 #x38415258 #x38414258 #x38415852 #x38415842 #x38413852 #x38413842
+          #x38413552 #x38413542 #x3432564E #x3234564E #x30313250 #x30313050 #x32313050 #x36313050 #x30314241
+          #x3531564E #x30313451 #x31303451 #x38345258 #x38344258 #x38345241 #x38344241 #x20203143 #x20203243
+          #x20203443 #x20203144 #x20203244 #x20203444 #x20203844 #x20203152 #x20203252 #x20203452 #x20303152
+          #x20323152 #x59555641 #x59555658 #x30333050)
+         (cl:>= version 1))
+        (cl:otherwise cl:nil)))))
+
+(cl:defun data-offer-error-is-valid (value version)
+  (cl:let ((code (%enum-value 'data-offer-error value)))
+    (cl:when code
+      (cl:case code
+        ((0 1 2 3) (cl:>= version 1))
+        (cl:otherwise cl:nil)))))
+
+(cl:defun data-source-error-is-valid (value version)
+  (cl:let ((code (%enum-value 'data-source-error value)))
+    (cl:when code
+      (cl:case code
+        ((0 1) (cl:>= version 1))
+        (cl:otherwise cl:nil)))))
+
+(cl:defun data-device-error-is-valid (value version)
+  (cl:let ((code (%enum-value 'data-device-error value)))
+    (cl:when code
+      (cl:case code
+        ((0 1) (cl:>= version 1))
+        (cl:otherwise cl:nil)))))
+
+(cl:defun data-device-manager-dnd-action-is-valid (value version)
+  (cl:let ((code (%enum-value 'data-device-manager-dnd-action value)))
+    (cl:when code
+      (cl:let ((valid 0))
+        (cl:when (cl:>= version 1)
+          (cl:setf valid (cl:logior valid 1)
+                valid (cl:logior valid 2)
+                valid (cl:logior valid 4)))
+        (cl:if (cl:< version 1)
+            (cl:zerop code)
+            (cl:case code
+              ((0 1 2 4) (cl:>= version 1))
+              (cl:otherwise (cl:zerop (cl:logandc2 code valid)))))))))
+
+(cl:defun shell-error-is-valid (value version)
+  (cl:let ((code (%enum-value 'shell-error value)))
+    (cl:when code
+      (cl:case code
+        (0 (cl:>= version 1))
+        (cl:otherwise cl:nil)))))
+
+(cl:defun shell-surface-resize-is-valid (value version)
+  (cl:let ((code (%enum-value 'shell-surface-resize value)))
+    (cl:when code
+      (cl:let ((valid 0))
+        (cl:when (cl:>= version 1)
+          (cl:setf valid (cl:logior valid 1)
+                valid (cl:logior valid 2)
+                valid (cl:logior valid 4)
+                valid (cl:logior valid 5)
+                valid (cl:logior valid 6)
+                valid (cl:logior valid 8)
+                valid (cl:logior valid 9)
+                valid (cl:logior valid 10)))
+        (cl:if (cl:< version 1)
+            (cl:zerop code)
+            (cl:case code
+              ((0 1 2 4 5 6 8 9 10) (cl:>= version 1))
+              (cl:otherwise (cl:zerop (cl:logandc2 code valid)))))))))
+
+(cl:defun shell-surface-transient-is-valid (value version)
+  (cl:let ((code (%enum-value 'shell-surface-transient value)))
+    (cl:when code
+      (cl:let ((valid 0))
+        (cl:when (cl:>= version 1)
+          (cl:setf valid (cl:logior valid #x1)))
+        (cl:if (cl:< version 1)
+            (cl:zerop code)
+            (cl:case code
+              (#x1 (cl:>= version 1))
+              (cl:otherwise (cl:zerop (cl:logandc2 code valid)))))))))
+
+(cl:defun shell-surface-fullscreen-method-is-valid (value version)
+  (cl:let ((code (%enum-value 'shell-surface-fullscreen-method value)))
+    (cl:when code
+      (cl:case code
+        ((0 1 2 3) (cl:>= version 1))
+        (cl:otherwise cl:nil)))))
+
+(cl:defun surface-error-is-valid (value version)
+  (cl:let ((code (%enum-value 'surface-error value)))
+    (cl:when code
+      (cl:case code
+        ((0 1 2 3 4) (cl:>= version 1))
+        (cl:otherwise cl:nil)))))
+
+(cl:defun seat-capability-is-valid (value version)
+  (cl:let ((code (%enum-value 'seat-capability value)))
+    (cl:when code
+      (cl:let ((valid 0))
+        (cl:when (cl:>= version 1)
+          (cl:setf valid (cl:logior valid 1)
+                valid (cl:logior valid 2)
+                valid (cl:logior valid 4)))
+        (cl:if (cl:< version 1)
+            (cl:zerop code)
+            (cl:case code
+              ((1 2 4) (cl:>= version 1))
+              (cl:otherwise (cl:zerop (cl:logandc2 code valid)))))))))
+
+(cl:defun seat-error-is-valid (value version)
+  (cl:let ((code (%enum-value 'seat-error value)))
+    (cl:when code
+      (cl:case code
+        (0 (cl:>= version 1))
+        (cl:otherwise cl:nil)))))
+
+(cl:defun pointer-error-is-valid (value version)
+  (cl:let ((code (%enum-value 'pointer-error value)))
+    (cl:when code
+      (cl:case code
+        (0 (cl:>= version 1))
+        (cl:otherwise cl:nil)))))
+
+(cl:defun pointer-button-state-is-valid (value version)
+  (cl:let ((code (%enum-value 'pointer-button-state value)))
+    (cl:when code
+      (cl:case code
+        ((0 1) (cl:>= version 1))
+        (cl:otherwise cl:nil)))))
+
+(cl:defun pointer-axis-is-valid (value version)
+  (cl:let ((code (%enum-value 'pointer-axis value)))
+    (cl:when code
+      (cl:case code
+        ((0 1) (cl:>= version 1))
+        (cl:otherwise cl:nil)))))
+
+(cl:defun pointer-axis-source-is-valid (value version)
+  (cl:let ((code (%enum-value 'pointer-axis-source value)))
+    (cl:when code
+      (cl:case code
+        ((0 1 2) (cl:>= version 1))
+        (3 (cl:>= version 6))
+        (cl:otherwise cl:nil)))))
+
+(cl:defun pointer-axis-relative-direction-is-valid (value version)
+  (cl:let ((code (%enum-value 'pointer-axis-relative-direction value)))
+    (cl:when code
+      (cl:case code
+        ((0 1) (cl:>= version 1))
+        (cl:otherwise cl:nil)))))
+
+(cl:defun keyboard-keymap-format-is-valid (value version)
+  (cl:let ((code (%enum-value 'keyboard-keymap-format value)))
+    (cl:when code
+      (cl:case code
+        ((0 1) (cl:>= version 1))
+        (cl:otherwise cl:nil)))))
+
+(cl:defun keyboard-key-state-is-valid (value version)
+  (cl:let ((code (%enum-value 'keyboard-key-state value)))
+    (cl:when code
+      (cl:case code
+        ((0 1) (cl:>= version 1))
+        (cl:otherwise cl:nil)))))
+
+(cl:defun output-subpixel-is-valid (value version)
+  (cl:let ((code (%enum-value 'output-subpixel value)))
+    (cl:when code
+      (cl:case code
+        ((0 1 2 3 4 5) (cl:>= version 1))
+        (cl:otherwise cl:nil)))))
+
+(cl:defun output-transform-is-valid (value version)
+  (cl:let ((code (%enum-value 'output-transform value)))
+    (cl:when code
+      (cl:case code
+        ((0 1 2 3 4 5 6 7) (cl:>= version 1))
+        (cl:otherwise cl:nil)))))
+
+(cl:defun output-mode-is-valid (value version)
+  (cl:let ((code (%enum-value 'output-mode value)))
+    (cl:when code
+      (cl:let ((valid 0))
+        (cl:when (cl:>= version 1)
+          (cl:setf valid (cl:logior valid #x1)
+                valid (cl:logior valid #x2)))
+        (cl:if (cl:< version 1)
+            (cl:zerop code)
+            (cl:case code
+              ((#x1 #x2) (cl:>= version 1))
+              (cl:otherwise (cl:zerop (cl:logandc2 code valid)))))))))
+
+(cl:defun subcompositor-error-is-valid (value version)
+  (cl:let ((code (%enum-value 'subcompositor-error value)))
+    (cl:when code
+      (cl:case code
+        ((0 1) (cl:>= version 1))
+        (cl:otherwise cl:nil)))))
+
+(cl:defun subsurface-error-is-valid (value version)
+  (cl:let ((code (%enum-value 'subsurface-error value)))
+    (cl:when code
+      (cl:case code
+        (0 (cl:>= version 1))
+        (cl:otherwise cl:nil)))))
+
 (cl:defvar *registry-global* 0)
 (cl:defun registry-send-global (resource name interface version)
   (resource-post-event resource *registry-global*
@@ -747,6 +996,8 @@
   output-subpixel
   output-transform
   output-mode
+  subcompositor-error
+  subsurface-error
   display-interface
   registry-interface
   compositor-interface
@@ -829,3 +1080,31 @@
   output-send-scale
   output-send-name
   output-send-description))
+
+(cl:export '(
+  display-error-is-valid
+  shm-error-is-valid
+  shm-format-is-valid
+  data-offer-error-is-valid
+  data-source-error-is-valid
+  data-device-error-is-valid
+  data-device-manager-dnd-action-is-valid
+  shell-error-is-valid
+  shell-surface-resize-is-valid
+  shell-surface-transient-is-valid
+  shell-surface-fullscreen-method-is-valid
+  surface-error-is-valid
+  seat-capability-is-valid
+  seat-error-is-valid
+  pointer-error-is-valid
+  pointer-button-state-is-valid
+  pointer-axis-is-valid
+  pointer-axis-source-is-valid
+  pointer-axis-relative-direction-is-valid
+  keyboard-keymap-format-is-valid
+  keyboard-key-state-is-valid
+  output-subpixel-is-valid
+  output-transform-is-valid
+  output-mode-is-valid
+  subcompositor-error-is-valid
+  subsurface-error-is-valid))
