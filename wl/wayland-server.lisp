@@ -181,11 +181,9 @@
 (defcstruct listener
   (:link (:struct list))
   (:notify :pointer))
-(cl:export 'listener)
 
 (defcstruct signal
   (:listener-list (:struct list)))
-(cl:export 'signal)
 
 (cl:defmacro signal-init (signal)
   `(list-init (foreign-slot-pointer ,signal '(:struct signal) :listener-list)))
@@ -206,6 +204,8 @@
   `(let ((lst (foreign-slot-pointer ,signal '(:struct signal) :listener-list)))
      (do-wl-list (lst link listener)
         (funcall (foreign-slot-pointer elm '(:struct listener) :notify) ,data))))
+
+(cl:export '(listener signal signal-init signal-add signal-get signal-emit))
 
 (define-wl-func signal emit-mutable :void
   (data :pointer))
