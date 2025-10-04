@@ -3,7 +3,7 @@
 (cl:in-package "WLR")
 
 (define-foreign-library libwlroots
-  (:unix (:or "libwlroots-0.19.so" "libwlroots-0.20.so" "libwlroots-0.18.so")))
+  (:unix (:or "libwlroots-0.19.so")))
 
 (use-foreign-library libwlroots)
 
