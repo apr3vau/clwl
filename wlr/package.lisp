@@ -5,7 +5,7 @@
 (define-foreign-library libwlroots
   (:unix (:or "libwlroots-0.19.so" "libwlroots-0.20.so" "libwlroots-0.18.so")))
 
-(use-foreign-library wl:libwayland-server)
+(use-foreign-library libwlroots)
 
 (defmacro define-wlr-events-struct (name &body signals)
   (let ((struct-name (intern (concatenate 'string (symbol-name name) "-EVENTS") "WLR")))
@@ -39,7 +39,7 @@
 
 (defmacro event-signal (object type-name slot-name)
   (let ((events-type-name (intern (concatenate 'string (symbol-name type-name) "-EVENTS") "WLR")))
-    `(cffi:foreign-slot-value (cffi:foreign-slot-value ,object '(:struct ,type-name) :events)
-                              '(:struct ,events-type-name)
-                              ,slot-name)))
+    `(cffi:foreign-slot-pointer (cffi:foreign-slot-pointer ,object '(:struct ,type-name) :events)
+                                 '(:struct ,events-type-name)
+                                 ,slot-name)))
 (export 'event-signal)
