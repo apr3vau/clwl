@@ -187,16 +187,25 @@
   (:listener-list (:struct list)))
 (cl:export 'signal)
 
-(define-wl-func signal init :void)
+(cl:defmacro signal-init (signal)
+  `(list-init (foreign-slot-pointer ,signal '(:struct signal) :listener-list)))
 
-(define-wl-func signal add :void
-  (listener :pointer))
+(cl:defmacro signal-add (signal listener)
+  `(list-insert (foreign-slot-pointer (foreign-slot-pointer ,signal '(:struct signal) :listener-list)
+                                      '(:struct list)
+                                      :prev)
+                (foreign-slot-pointer ,listener '(:struct listener) :link)))
 
-(define-wl-func signal get :pointer
-  (notify-func :pointer))
+(cl:defmacro signal-get (signal notify-func)
+  `(do-wl-list ((foreign-slot-pointer ,signal '(:struct signal) :listener-list)
+                link listener)
+     (when (eq (foreign-slot-pointer elm '(:struct listener) :notify) ,notify-func)
+       (return elm))))
 
-(define-wl-func signal emit :void
-  (data :pointer))
+(cl:defmacro signal-emit (signal data)
+  `(let ((lst (foreign-slot-pointer ,signal '(:struct signal) :listener-list)))
+     (do-wl-list (lst link listener)
+        (funcall (foreign-slot-pointer elm '(:struct listener) :notify) ,data))))
 
 (define-wl-func signal emit-mutable :void
   (data :pointer))

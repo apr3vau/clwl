@@ -1,5 +1,5 @@
 (asdf:defsystem clwl
-  :depends-on (:cffi)
+  :depends-on (:alexandria :cffi)
   :components ((:file "wl/package")
 
                (:file "wl/wayland-util")

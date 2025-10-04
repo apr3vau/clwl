@@ -4,6 +4,13 @@
   (make-pointer (cl:- (pointer-address ptr) (foreign-slot-offset type member))))
 (cl:export 'container-of)
 
+(cl:defmacro do-wl-list ((head member item-type) cl:&body body)
+  `(let ((lst ,head))
+     (loop for elm = (list-next lst ,member ,(:struct item-type))
+           then (list-next elm ,member ,(:struct item-type))
+           while (not (eq elm lst))
+           do ,@body)))
+
 (defcstruct message
   (:name :string)
   (:signature :string)
