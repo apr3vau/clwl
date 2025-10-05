@@ -58,7 +58,11 @@ To try out tinywl, evaluate:
 
 ### Development
 
-We provide some helper macro in `wl/package.lisp` and `wlr/package.lisp`. Check them for details.
+Wayland related bindings are under `wl` directory, they corresponding to `/usr/include/wayland-*.h`
+
+wlroots related bindings are under `wlr` directory. The directory hierachy is simulating from `/usr/include/wlroots-0.19/wlr/`.
+
+Additionally, provide some helper macro in `wl/package.lisp` and `wlr/package.lisp`. Check them for details.
 
 > Ask AI agents to generate new bindings efficiently.
 
