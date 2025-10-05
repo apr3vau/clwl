@@ -1,5 +1,7 @@
 (in-package "WLR")
 
+(defcstruct xdg-surface)
+
 (defctype scene-buffer-point-accepts-input-func :pointer)
 (defctype scene-buffer-iterator-func :pointer)
 

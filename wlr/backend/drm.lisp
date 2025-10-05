@@ -3,7 +3,8 @@
 (define-wlr-events-struct drm-lease destroy)
 
 (defcstruct drm-backend)
-(export 'drm-backend)
+(defcstruct session)
+(defcstruct device)
 
 (defcstruct drm-lease
   (:fd :int)

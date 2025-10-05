@@ -1,5 +1,8 @@
 (in-package "WLR")
 
+(defcstruct data-source)
+(defcstruct drag)
+
 (define-wlr-events-struct data-device-manager destroy)
 
 (define-wlr-private-listener data-device-manager display-destroy)

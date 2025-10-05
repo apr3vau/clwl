@@ -1,5 +1,8 @@
 (in-package "WLR")
 
+(defcstruct backend)
+(defcstruct renderer)
+
 (defcstruct allocator-interface
   (:create-buffer :pointer)
   (:destroy :pointer))

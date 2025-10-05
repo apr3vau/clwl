@@ -1,5 +1,9 @@
 (in-package "WLR")
 
+(defcstruct xcursor-manager)
+(defcstruct surface)
+(defcstruct output-layout)
+
 (define-wlr-events-struct cursor
   motion
   motion-absolute

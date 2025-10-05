@@ -1,7 +1,7 @@
 (in-package "WLR")
 
 (defcstruct buffer)
-(export 'buffer)
+(defcstruct renderer)
 
 (defcstruct texture
   (:impl :pointer)

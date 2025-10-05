@@ -1,5 +1,8 @@
 (cl:in-package "WLR")
 
+(defcstruct backend-impl)
+(defcstruct session)
+
 (defcstruct backend-output-state
   (:output (:pointer (:struct output)))
   (:base (:struct output-state)))

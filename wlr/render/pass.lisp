@@ -1,6 +1,9 @@
 (in-package "WLR")
 
+(defcstruct buffer)
+(defcstruct texture)
 (defcstruct render-pass)
+(defcstruct render-timer)
 
 (defcstruct buffer-pass-options
   (:timer (:pointer (:struct render-timer)))

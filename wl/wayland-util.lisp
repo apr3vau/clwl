@@ -4,6 +4,8 @@
   (make-pointer (cl:- (pointer-address ptr) (foreign-slot-offset type member))))
 (cl:export 'container-of)
 
+(defcstruct interface)
+
 (defcstruct message
   (:name :string)
   (:signature :string)
