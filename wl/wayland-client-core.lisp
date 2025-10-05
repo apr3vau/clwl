@@ -113,7 +113,7 @@
 (define-wl-func display get-error :int)
 
 (define-wl-func display get-protocol-error :uint32
-  (interface (:pointer (:struct interface)))
+  (interface (:pointer (:pointer (:struct interface))))
   (id (:pointer :uint32)))
 
 (define-wl-func display flush :int)

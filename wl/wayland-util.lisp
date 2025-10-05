@@ -7,7 +7,7 @@
 (defcstruct message
   (:name :string)
   (:signature :string)
-  (:types :pointer))
+  (:types (:pointer (:pointer (:struct interface)))))
 
 (defcstruct interface
   (:name :string)
@@ -106,16 +106,16 @@
   (size :uint32))
 
 (define-wl-func array copy :int
-  (source :pointer))
+  (source (:pointer (:struct array))))
 
 (defcunion argument
   (:i :int32)
   (:u :uint32)
   (:f :int32)
   (:s :string)
-  (:o :pointer)
+  (:o (:pointer (:struct object)))
   (:n :uint32)
-  (:a :pointer)
+  (:a (:pointer (:struct array)))
   (:h :int32))
 
 (defcenum iterator-result

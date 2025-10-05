@@ -2,7 +2,7 @@
 
 (cl:defvar *egl-platform* 1)
 
-(defcfun ("wl_egl_window_create" egl-window-create) :pointer
+(defcfun ("wl_egl_window_create" egl-window-create) (:pointer (:struct egl-window))
   (surface (:pointer (:struct surface)))
   (width :int)
   (height :int))
@@ -16,5 +16,5 @@
   (dy :int))
 
 (define-wl-func egl-window get-attached-size :void
-  (width :pointer)
-  (height :pointer))
+  (width (:pointer :int))
+  (height (:pointer :int)))

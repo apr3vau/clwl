@@ -7,12 +7,12 @@
   (:error 8))
 (cl:export 'event)
 
-(defcfun ("wl_event_loop_create" event-loop-create) :pointer)
+(defcfun ("wl_event_loop_create" event-loop-create) (:pointer (:struct event-loop)))
 (cl:export 'event-loop-create)
 
 (define-wl-func event-loop destroy :void)
 
-(define-wl-func event-loop add-fd :pointer
+(define-wl-func event-loop add-fd (:pointer (:struct event-source))
   (fd :int)
   (mask :uint32)
   (func :pointer)
@@ -21,11 +21,11 @@
 (define-wl-func event-source fd-update :int
   (mask :uint32))
 
-(define-wl-func event-loop add-timer :pointer
+(define-wl-func event-loop add-timer (:pointer (:struct event-source))
   (func :pointer)
   (data :pointer))
 
-(define-wl-func event-loop add-signal :pointer
+(define-wl-func event-loop add-signal (:pointer (:struct event-source))
   (signal-number :int)
   (func :pointer)
   (data :pointer))
@@ -42,24 +42,24 @@
 
 (define-wl-func event-loop dispatch-idle :void)
 
-(define-wl-func event-loop add-idle :pointer
+(define-wl-func event-loop add-idle (:pointer (:struct event-source))
   (func :pointer)
   (data :pointer))
 
 (define-wl-func event-loop get-fd :int)
 
 (define-wl-func event-loop add-destroy-listener :void
-  (listener :pointer))
+  (listener (:pointer (:struct listener))))
 
-(define-wl-func event-loop get-destroy-listener :pointer
+(define-wl-func event-loop get-destroy-listener (:pointer (:struct listener))
   (notify-func :pointer))
 
-(defcfun ("wl_display_create" display-create) :pointer)
+(defcfun ("wl_display_create" display-create) (:pointer (:struct display)))
 (cl:export 'display-create)
 
 (define-wl-func display destroy :void)
 
-(define-wl-func display get-event-loop :pointer)
+(define-wl-func display get-event-loop (:pointer (:struct event-loop)))
 
 (define-wl-func display add-socket :int
   (name :string))
@@ -85,11 +85,11 @@
 (define-wl-func display next-serial :uint32)
 
 (define-wl-func display add-destroy-listener :void
-  (listener :pointer))
+  (listener (:pointer (:struct listener))))
 
-(defcfun ("wl_global_create" global-create) :pointer
-  (display :pointer)
-  (interface :pointer)
+(defcfun ("wl_global_create" global-create) (:pointer (:struct global))
+  (display (:pointer (:struct display)))
+  (interface (:pointer (:struct interface)))
   (version :int)
   (data :pointer)
   (bind-func :pointer))
@@ -103,31 +103,31 @@
   (filter-func :pointer)
   (data :pointer))
 
-(define-wl-func global get-interface :pointer)
+(define-wl-func global get-interface (:pointer (:struct interface)))
 
 (define-wl-func global get-name :uint32
-  (client :pointer))
+  (client (:pointer (:struct client))))
 
 (define-wl-func global get-version :uint32)
 
-(define-wl-func global get-display :pointer)
+(define-wl-func global get-display (:pointer (:struct display)))
 
 (define-wl-func global get-user-data :pointer)
 
 (define-wl-func global set-user-data :void
   (data :pointer))
 
-(defcfun ("wl_client_create" client-create) :pointer
-  (display :pointer)
+(defcfun ("wl_client_create" client-create) (:pointer (:struct client))
+  (display (:pointer (:struct display)))
   (fd :int))
 (cl:export 'client-create)
 
-(define-wl-func display get-client-list :pointer)
+(define-wl-func display get-client-list (:pointer (:struct list)))
 
-(define-wl-func client get-link :pointer)
+(define-wl-func client get-link (:pointer (:struct list)))
 
-(defcfun ("wl_client_from_link" client-from-link) :pointer
-  (link :pointer))
+(defcfun ("wl_client_from_link" client-from-link) (:pointer (:struct client))
+  (link (:pointer (:struct list))))
 (cl:export 'client-from-link)
 
 (define-wl-func client destroy :void)
@@ -142,18 +142,18 @@
 (define-wl-func client get-fd :int)
 
 (define-wl-func client add-destroy-listener :void
-  (listener :pointer))
+  (listener (:pointer (:struct listener))))
 
-(define-wl-func client get-destroy-listener :pointer
+(define-wl-func client get-destroy-listener (:pointer (:struct listener))
   (notify-func :pointer))
 
 (define-wl-func client add-destroy-later-listener :void
-  (listener :pointer))
+  (listener (:pointer (:struct listener))))
 
-(define-wl-func client get-destroy-later-listener :pointer
+(define-wl-func client get-destroy-later-listener (:pointer (:struct listener))
   (notify-func :pointer))
 
-(define-wl-func client get-object :pointer
+(define-wl-func client get-object (:pointer (:struct resource))
   (id :uint32))
 
 (define-wl-func client post-no-memory :void)
@@ -163,7 +163,7 @@
   cl:&rest)
 
 (define-wl-func client add-resource-created-listener :void
-  (listener :pointer))
+  (listener (:pointer (:struct listener))))
 
 (define-wl-func client for-each-resource :void
   (iterator-func :pointer)
@@ -216,7 +216,7 @@
 
 (define-wl-func resource post-event-array :void
   (opcode :uint32)
-  (args :pointer))
+  (args (:pointer (:union argument))))
 
 (define-wl-func resource queue-event :void
   (opcode :uint32)
@@ -233,11 +233,11 @@
 
 (define-wl-func resource post-no-memory :void)
 
-(define-wl-func client get-display :pointer)
+(define-wl-func client get-display (:pointer (:struct display)))
 
-(defcfun ("wl_resource_create" resource-create) :pointer
-  (client :pointer)
-  (interface :pointer)
+(defcfun ("wl_resource_create" resource-create) (:pointer (:struct resource))
+  (client (:pointer (:struct client)))
+  (interface (:pointer (:struct interface)))
   (version :int)
   (id :uint32))
 (cl:export 'resource-create)
@@ -257,20 +257,20 @@
 
 (define-wl-func resource get-id :uint32)
 
-(define-wl-func resource get-link :pointer)
+(define-wl-func resource get-link (:pointer (:struct list)))
 
-(defcfun ("wl_resource_from_link" resource-from-link) :pointer
-  (resource-list :pointer))
+(defcfun ("wl_resource_from_link" resource-from-link) (:pointer (:struct resource))
+  (resource-list (:pointer (:struct list))))
 (cl:export 'resource-from-link)
 
-(defcfun ("wl_resource_find_for_client" resource-find-for-client) :pointer
-  (list :pointer)
-  (client :pointer))
+(defcfun ("wl_resource_find_for_client" resource-find-for-client) (:pointer (:struct resource))
+  (list (:pointer (:struct list)))
+  (client (:pointer (:struct client))))
 (cl:export 'resource-find-for-client)
 
-(define-wl-func resource get-client :pointer)
+(define-wl-func resource get-client (:pointer (:struct client)))
 
-(define-wl-func resouce set-user-data :void
+(define-wl-func resource set-user-data :void
   (data :pointer))
 
 (define-wl-func resource get-user-data :pointer)
@@ -281,19 +281,19 @@
   (destroy-func :pointer))
 
 (define-wl-func resource instance-of :int
-  (interface :pointer)
+  (interface (:pointer (:struct interface)))
   (implementation :pointer))
 
 (define-wl-func resource get-class :string)
 
 (define-wl-func resource add-destroy-listener :void
-  (listener :pointer))
+  (listener (:pointer (:struct listener))))
 
-(define-wl-func resource get-destroy-listener :pointer
+(define-wl-func resource get-destroy-listener (:pointer (:struct listener))
   (notify-func :pointer))
 
-(defcfun ("wl_shm_buffer_get" shm-buffer-get) :pointer
-  (resource :pointer))
+(defcfun ("wl_shm_buffer_get" shm-buffer-get) (:pointer (:struct shm-buffer))
+  (resource (:pointer (:struct resource))))
 (cl:export 'shm-buffer-get)
 
 (define-wl-func shm-buffer begin-access :void)
@@ -310,7 +310,7 @@
 
 (define-wl-func shm-buffer get-height :int32)
 
-(define-wl-func shm-buffer ref-pool :pointer)
+(define-wl-func shm-buffer ref-pool (:pointer (:struct shm-pool)))
 
 (define-wl-func shm-pool unref :void)
 
