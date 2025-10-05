@@ -51,6 +51,3 @@
          (cl:declare (cl:inline ,lisp-name))
          (,proxy-name ,name ,@args))
        (cl:export ',lisp-name))))
-
-(cl:eval-when (:compile-toplevel :load-toplevel :execute)
- (cl:export '(signal listener libwayland-server libwayland-client)))
