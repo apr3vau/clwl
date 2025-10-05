@@ -1,5 +1,6 @@
-(cl:defpackage "WLR"
-  (:use :cl :cffi))
+(cl:eval-when (:compile-toplevel :load-toplevel :execute)
+  (cl:unless (cl:find-package "WLR")
+    (cl:make-package "WLR" :use '("CL" "CFFI"))))
 (cl:in-package "WLR")
 
 (define-foreign-library libwlroots

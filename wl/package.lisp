@@ -1,5 +1,6 @@
-(cl:defpackage "WL"
-  (:use :cffi))
+(cl:eval-when (:compile-toplevel :load-toplevel :execute)
+  (cl:unless (cl:find-package "WL")
+    (cl:make-package "WL" :use '("CFFI"))))
 (cl:in-package "WL")
 
 (define-foreign-library libwayland-server
