@@ -4,51 +4,52 @@
 
 (define-wl-func event-queue destroy :void)
 
-(define-wl-func proxy marshal-flags :pointer
+(define-wl-func proxy marshal-flags (:pointer (:struct proxy))
   (opcode :uint32)
-  (interface :pointer)
+  (interface (:pointer (:struct interface)))
   (version :uint32)
   (flags :uint32)
   cl:&rest)
 
-(define-wl-func proxy marshal-array-flags :pointer
+(define-wl-func proxy marshal-array-flags (:pointer (:struct proxy))
   (opcode :uint32)
-  (interface :pointer)
+  (interface (:pointer (:struct interface)))
   (version :uint32)
   (flags :uint32)
-  (args :pointer))
+  (args (:pointer (:union argument))))
 
 (define-wl-func proxy marshal :void
   (opcode :uint32)
   cl:&rest)
 
-(define-wl-func proxy create :pointer
-  (interface :pointer))
+(define-wl-func proxy create (:pointer (:struct proxy))
+  (interface (:pointer (:struct interface))))
 
 (define-wl-func proxy create-wrapper :pointer)
 
-(define-wl-func proxy-wrapper destroy :void)
+(defcfun ("wl_proxy_wrapper_destroy" proxy-wrapper-destroy) :void
+  (proxy-wrapper :pointer))
 
-(define-wl-func proxy marshal-constructor :pointer
+(define-wl-func proxy marshal-constructor (:pointer (:struct proxy))
   (opcode :uint32)
-  (interface :pointer)
+  (interface (:pointer (:struct interface)))
   cl:&rest)
 
-(define-wl-func proxy marshal-constructor-versioned :pointer
+(define-wl-func proxy marshal-constructor-versioned (:pointer (:struct proxy))
   (opcode :uint32)
-  (interface :pointer)
+  (interface (:pointer (:struct interface)))
   (version :uint32)
   cl:&rest)
 
-(define-wl-func proxy marshal-array-constructor :pointer
+(define-wl-func proxy marshal-array-constructor (:pointer (:struct proxy))
   (opcode :uint32)
-  (args :pointer)
-  (interface :pointer))
+  (args (:pointer (:union argument)))
+  (interface (:pointer (:struct interface))))
 
-(define-wl-func proxy marshal-array-constructor-versioned :pointer
+(define-wl-func proxy marshal-array-constructor-versioned (:pointer (:struct proxy))
   (opcode :uint32)
-  (args :pointer)
-  (interface :pointer)
+  (args (:pointer (:union argument)))
+  (interface (:pointer (:struct interface)))
   (version :uint32))
 
 (define-wl-func proxy destroy :void)
