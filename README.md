@@ -45,6 +45,17 @@ The naming convention is `wlr_<name>` => `wlr:<name>`.
 
 > To access `wl:signal`s inside `events` structure of wlroots quickly, use `wlr:event-signal` macro.
 
+### tinywl
+
+To try out tinywl, evaluate:
+
+``` common-lisp
+(ql:quickload :clwl-tinywl)
+(tinywl:main)
+```
+
+> You have to start REPL with a real display device, either TTY, X11 or Wayland compositor. Not via SSH!
+
 ### Development
 
 We provide some helper macro in `wl/package.lisp` and `wlr/package.lisp`. Check them for details.
