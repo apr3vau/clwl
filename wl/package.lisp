@@ -13,17 +13,17 @@
 (use-foreign-library libwayland-server)
 (use-foreign-library libwayland-client)
 
-(cl:defmacro define-wl-func (object suffix ret-type cl:&body args)
-  (cl:let* ((object-str (translate-underscore-separated-name object))
+(cl:defmacro define-wl-func (type suffix ret-type cl:&body args)
+  (cl:let* ((object-str (translate-underscore-separated-name type))
             (suffix-str (translate-underscore-separated-name suffix))
             (c-name (cl:concatenate 'cl:string "wl_" object-str "_" suffix-str))
             (lisp-name (cl:intern (cl:concatenate
                                    'cl:string
-                                   (cl:symbol-name object) "-" (cl:symbol-name suffix))
+                                   (cl:symbol-name type) "-" (cl:symbol-name suffix))
                                   "WL")))
     `(cl:eval-when (:compile-toplevel :load-toplevel :execute)
        (defcfun (,c-name ,lisp-name) ,ret-type
-         (,object :pointer)
+         (,type (:pointer (:struct ,type)))
          ,@args)
        (cl:export ',lisp-name))))
 
@@ -51,3 +51,9 @@
          (cl:declare (cl:inline ,lisp-name))
          (,proxy-name ,name ,@args))
        (cl:export ',lisp-name))))
+
+(defcstruct display)
+(defcstruct proxy)
+(defcstruct event-queue)
+(defcstruct surface)
+(defcstruct egl-window)

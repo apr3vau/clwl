@@ -82,16 +82,16 @@
 (define-wl-func proxy get-class :string)
 
 (define-wl-func proxy set-queue :void
-  (queue :pointer))
+  (queue (:pointer (:struct event-queue))))
 
-(define-wl-func proxy get-queue :pointer)
+(define-wl-func proxy get-queue (:pointer (:struct event-queue)))
 
 (define-wl-func event-queue get-name :string)
 
-(defcfun ("wl_display_connect" display-connect) :pointer
+(defcfun ("wl_display_connect" display-connect) (:pointer (:struct display))
   (name :string))
 
-(defcfun ("wl_display_connect_to_fd" display-connect-to-fd) :pointer
+(defcfun ("wl_display_connect_to_fd" display-connect-to-fd) (:pointer (:struct display))
   (fd :int))
 
 (cl:export '(display-connect display-connect-to-fd))
@@ -103,33 +103,33 @@
 (define-wl-func display dispatch :int)
 
 (define-wl-func display dispatch-queue :int
-  (queue :pointer))
+  (queue (:pointer (:struct event-queue))))
 
 (define-wl-func display dispatch-queue-pending :int
-  (queue :pointer))
+  (queue (:pointer (:struct event-queue))))
 
 (define-wl-func display dispatch-pending :int)
 
 (define-wl-func display get-error :int)
 
 (define-wl-func display get-protocol-error :uint32
-  (interface :pointer)
+  (interface (:pointer (:struct interface)))
   (id (:pointer :uint32)))
 
 (define-wl-func display flush :int)
 
 (define-wl-func display roundtrip-queue :int
-  (queue :pointer))
+  (queue (:pointer (:struct event-queue))))
 
 (define-wl-func display roundtrip :int)
 
-(define-wl-func display create-queue :pointer)
+(define-wl-func display create-queue (:pointer (:struct event-queue)))
 
-(define-wl-func display create-queue-with-name :pointer
+(define-wl-func display create-queue-with-name (:pointer (:struct event-queue))
   (name :string))
 
 (define-wl-func display prepare-read-queue :int
-  (queue :pointer))
+  (queue (:pointer (:struct event-queue))))
 
 (define-wl-func display prepare-read :int)
 
