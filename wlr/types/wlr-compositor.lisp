@@ -170,34 +170,34 @@
 
 (define-wlr-func surface-state has-buffer :bool)
 
-(define-wlr-func surface get-texture :pointer)
+(define-wlr-func surface get-texture (:pointer (:struct texture)))
 
-(define-wlr-func surface get-root-surface :pointer)
+(define-wlr-func surface get-root-surface (:pointer (:struct surface)))
 
 (define-wlr-func surface point-accepts-input :bool
   (sx :double)
   (sy :double))
 
-(define-wlr-func surface surface-at :pointer
+(define-wlr-func surface surface-at (:pointer (:struct surface))
   (sx :double)
   (sy :double)
   (sub-x (:pointer :double))
   (sub-y (:pointer :double)))
 
 (define-wlr-func surface send-enter :void
-  (output :pointer))
+  (output (:pointer (:struct output))))
 
 (define-wlr-func surface send-leave :void
-  (output :pointer))
+  (output (:pointer (:struct output))))
 
 (define-wlr-func surface send-frame-done :void
-  (when :pointer))
+  (when (:pointer (:struct timespec))))
 
 (define-wlr-func surface get-extents :void
   (box (:pointer (:struct box))))
 
-(define-wlr-func surface from-resource :pointer
-  (resource :pointer))
+(define-wlr-func surface from-resource (:pointer (:struct surface))
+  (resource (:pointer (:struct wl:resource))))
 
 (define-wlr-func surface for-each-surface :void
   (iterator :pointer)
@@ -221,25 +221,25 @@
   (transform :int))
 
 (define-wlr-func surface-synced init :bool
-  (surface :pointer)
-  (impl :pointer)
-  (pending :pointer)
-  (current :pointer))
+  (surface (:pointer (:struct surface)))
+  (impl (:pointer (:struct surface-synced-impl)))
+  (pending (:pointer (:struct surface-state)))
+  (current (:pointer (:struct surface-state))))
 
 (define-wlr-func surface-synced finish :void)
 
-(define-wlr-func surface-synced get-state :pointer
+(define-wlr-func surface-synced get-state (:pointer (:struct surface-state))
   (state (:pointer (:struct surface-state))))
 
-(defcfun ("wlr_region_from_resource" region-from-resource) :pointer
-  (resource :pointer))
+(defcfun ("wlr_region_from_resource" region-from-resource) (:pointer (:struct pixman-region32))
+  (resource (:pointer (:struct wl:resource))))
 (export 'region-from-resource)
 
-(defcfun ("wlr_compositor_create" compositor-create) :pointer
-  (display :pointer)
+(defcfun ("wlr_compositor_create" compositor-create) (:pointer (:struct compositor))
+  (display (:pointer (:struct wl:display)))
   (version :uint32)
-  (renderer :pointer))
+  (renderer (:pointer (:struct renderer))))
 (export 'compositor-create)
 
 (define-wlr-func compositor set-renderer :void
-  (renderer :pointer))
+  (renderer (:pointer (:struct renderer))))

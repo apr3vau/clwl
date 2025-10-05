@@ -247,25 +247,25 @@
   (:x :int32)
   (:y :int32))
 
-(defcfun ("wlr_xdg_shell_create" xdg-shell-create) :pointer
-  (display :pointer)
+(defcfun ("wlr_xdg_shell_create" xdg-shell-create) (:pointer (:struct xdg-shell))
+  (display (:pointer (:struct wl:display)))
   (version :uint32))
 (export 'xdg-shell-create)
 
-(defcfun ("wlr_xdg_surface_from_resource" xdg-surface-from-resource) :pointer
-  (resource :pointer))
+(defcfun ("wlr_xdg_surface_from_resource" xdg-surface-from-resource) (:pointer (:struct xdg-surface))
+  (resource (:pointer (:struct wl:resource))))
 (export 'xdg-surface-from-resource)
 
-(defcfun ("wlr_xdg_popup_from_resource" xdg-popup-from-resource) :pointer
-  (resource :pointer))
+(defcfun ("wlr_xdg_popup_from_resource" xdg-popup-from-resource) (:pointer (:struct xdg-popup))
+  (resource (:pointer (:struct wl:resource))))
 (export 'xdg-popup-from-resource)
 
-(defcfun ("wlr_xdg_toplevel_from_resource" xdg-toplevel-from-resource) :pointer
-  (resource :pointer))
+(defcfun ("wlr_xdg_toplevel_from_resource" xdg-toplevel-from-resource) (:pointer (:struct xdg-toplevel))
+  (resource (:pointer (:struct wl:resource))))
 (export 'xdg-toplevel-from-resource)
 
-(defcfun ("wlr_xdg_positioner_from_resource" xdg-positioner-from-resource) :pointer
-  (resource :pointer))
+(defcfun ("wlr_xdg_positioner_from_resource" xdg-positioner-from-resource) (:pointer (:struct xdg-positioner))
+  (resource (:pointer (:struct wl:resource))))
 (export 'xdg-positioner-from-resource)
 
 (define-wlr-func xdg-surface ping :void)
@@ -331,28 +331,28 @@
 (define-wlr-func xdg-popup unconstrain-from-box :void
   (toplevel-space-box (:pointer (:struct box))))
 
-(define-wlr-func xdg-surface surface-at :pointer
+(define-wlr-func xdg-surface surface-at (:pointer (:struct surface))
   (sx :double)
   (sy :double)
   (sub-x (:pointer :double))
   (sub-y (:pointer :double)))
 
-(define-wlr-func xdg-surface popup-surface-at :pointer
+(define-wlr-func xdg-surface popup-surface-at (:pointer (:struct surface))
   (sx :double)
   (sy :double)
   (sub-x (:pointer :double))
   (sub-y (:pointer :double)))
 
-(defcfun ("wlr_xdg_surface_try_from_wlr_surface" xdg-surface-try-from-wlr-surface) :pointer
-  (surface :pointer))
+(defcfun ("wlr_xdg_surface_try_from_wlr_surface" xdg-surface-try-from-wlr-surface) (:pointer (:struct xdg-surface))
+  (surface (:pointer (:struct surface))))
 (export 'xdg-surface-try-from-wlr-surface)
 
-(defcfun ("wlr_xdg_toplevel_try_from_wlr_surface" xdg-toplevel-try-from-wlr-surface) :pointer
-  (surface :pointer))
+(defcfun ("wlr_xdg_toplevel_try_from_wlr_surface" xdg-toplevel-try-from-wlr-surface) (:pointer (:struct xdg-toplevel))
+  (surface (:pointer (:struct surface))))
 (export 'xdg-toplevel-try-from-wlr-surface)
 
-(defcfun ("wlr_xdg_popup_try_from_wlr_surface" xdg-popup-try-from-wlr-surface) :pointer
-  (surface :pointer))
+(defcfun ("wlr_xdg_popup_try_from_wlr_surface" xdg-popup-try-from-wlr-surface) (:pointer (:struct xdg-popup))
+  (surface (:pointer (:struct surface))))
 (export 'xdg-popup-try-from-wlr-surface)
 
 (define-wlr-func xdg-surface for-each-surface :void

@@ -17,14 +17,14 @@
 
 (export '(allocator-interface allocator))
 
-(defcfun ("wlr_allocator_autocreate" allocator-autocreate) :pointer
-  (backend :pointer)
-  (renderer :pointer))
+(defcfun ("wlr_allocator_autocreate" allocator-autocreate) (:pointer (:struct allocator))
+  (backend (:pointer (:struct backend)))
+  (renderer (:pointer (:struct renderer))))
 (export 'allocator-autocreate)
 
 (define-wlr-func allocator destroy :void)
 
-(define-wlr-func allocator create-buffer :pointer
+(define-wlr-func allocator create-buffer (:pointer (:struct buffer))
   (width :int)
   (height :int)
   (format :pointer))

@@ -1,14 +1,16 @@
 (in-package "WLR")
 
+(defcstruct render-pass)
+
 (defcstruct buffer-pass-options
-  (:timer :pointer)
+  (:timer (:pointer (:struct render-timer)))
   (:color-transform :pointer)
   (:signal-timeline :pointer)
   (:signal-point :uint64))
 
-(define-wlr-func renderer begin-buffer-pass :pointer
-  (buffer :pointer)
-  (options :pointer))
+(define-wlr-func renderer begin-buffer-pass (:pointer (:struct render-pass))
+  (buffer (:pointer (:struct buffer)))
+  (options (:pointer (:struct buffer-pass-options))))
 
 (define-wlr-func render-pass submit :bool)
 
@@ -21,11 +23,11 @@
   :nearest)
 
 (defcstruct renderer-texture-options
-  (:texture :pointer)
+  (:texture (:pointer (:struct texture)))
   (:src-box (:struct fbox))
   (:dst-box (:struct box))
   (:alpha :float)
-  (:clip :pointer)
+  (:clip (:pointer (:struct pixman-region32)))
   (:transform :int)
   (:filter-mode :int)
   (:blend-mode :int)
@@ -33,7 +35,7 @@
   (:wait-point :uint64))
 
 (define-wlr-func render-pass add-texture :void
-  (options :pointer))
+  (options (:pointer (:struct renderer-texture-options))))
 
 (defcstruct render-color
   (:r :float)
@@ -44,10 +46,10 @@
 (defcstruct render-rect-options
   (:box (:struct box))
   (:color (:struct render-color))
-  (:cliip :pointer)
+  (:clip (:pointer (:struct pixman-region32)))
   (:blend-mode :int))
 
 (export '(buffer-pass-options renderer-texture-options render-color render-rect-options))
 
 (define-wlr-func render-pass add-rect :void
-  (options :pointer))
+  (options (:pointer (:struct render-rect-options))))

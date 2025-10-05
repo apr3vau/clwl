@@ -18,8 +18,8 @@
 (define-wlr-private-listener data-offer source-destroy)
 
 (defcstruct data-offer
-  (:resource :pointer)
-  (:source :pointer)
+  (:resource (:pointer (:struct wl:resource)))
+  (:source (:pointer (:struct data-source)))
   (:type :int)
   (:link (:struct wl:list))
   (:actions :uint32)
@@ -38,7 +38,7 @@
 (define-wlr-events-struct data-source destroy)
 
 (defcstruct data-source
-  (:impl :pointer)
+  (:impl (:pointer (:struct data-source-impl)))
   (:mime-types (:struct wl:array))
   (:actions :int32)
   (:accepted :bool)
@@ -51,8 +51,8 @@
 (define-wlr-private-listener drag-icon surface-destroy)
 
 (defcstruct drag-icon
-  (:drag :pointer)
-  (:surface :pointer)
+  (:drag (:pointer (:struct drag)))
+  (:surface (:pointer (:struct surface)))
   (:events (:struct drag-icon-events))
   (:data :pointer)
   (:private (:struct drag-icon-private)))
@@ -75,12 +75,12 @@
   (:keyboard-grab (:struct seat-keyboard-grab))
   (:pointer-grab (:struct seat-pointer-grab))
   (:touch-grab (:struct seat-touch-grab))
-  (:seat :pointer)
-  (:seat-client :pointer)
-  (:focus-client :pointer)
-  (:icon :pointer)
-  (:focus :pointer)
-  (:source :pointer)
+  (:seat (:pointer (:struct seat)))
+  (:seat-client (:pointer (:struct seat-client)))
+  (:focus-client (:pointer (:struct seat-client)))
+  (:icon (:pointer (:struct drag-icon)))
+  (:focus (:pointer (:struct surface)))
+  (:source (:pointer (:struct data-source)))
   (:started :bool)
   (:dropped :bool)
   (:cancelling :bool)
@@ -91,13 +91,13 @@
   (:private (:struct drag-private)))
 
 (defcstruct drag-motion-event
-  (:drag :pointer)
+  (:drag (:pointer (:struct drag)))
   (:time :uint32)
   (:sx :double)
   (:sy :double))
 
 (defcstruct drag-drop-event
-  (:drag :pointer)
+  (:drag (:pointer (:struct drag)))
   (:time :uint32))
 
 (export '(data-device-manager
@@ -109,45 +109,45 @@
           drag-motion-event
           drag-drop-event))
 
-(defcfun ("wlr_data_device_manager_create" data-device-manager-create) :pointer
-  (display :pointer))
+(defcfun ("wlr_data_device_manager_create" data-device-manager-create) (:pointer (:struct data-device-manager))
+  (display (:pointer (:struct wl:display))))
 (export 'data-device-manager-create)
 
 (define-wlr-func seat request-set-selection :void
-  (seat-client :pointer)
-  (source :pointer)
+  (seat-client (:pointer (:struct seat-client)))
+  (source (:pointer (:struct data-source)))
   (serial :uint32))
 
 (define-wlr-func seat set-selection :void
-  (source :pointer)
+  (source (:pointer (:struct data-source)))
   (serial :uint32))
 
-(defcfun ("wlr_drag_create" drag-create) :pointer
-  (seat-client :pointer)
-  (source :pointer)
-  (icon-surface :pointer))
+(defcfun ("wlr_drag_create" drag-create) (:pointer (:struct drag))
+  (seat-client (:pointer (:struct seat-client)))
+  (source (:pointer (:struct data-source)))
+  (icon-surface (:pointer (:struct surface))))
 (export 'drag-create)
 
 (define-wlr-func seat request-start-drag :void
-  (drag :pointer)
-  (origin :pointer)
+  (drag (:pointer (:struct drag)))
+  (origin (:pointer (:struct surface)))
   (serial :uint32))
 
 (define-wlr-func seat start-drag :void
-  (drag :pointer)
+  (drag (:pointer (:struct drag)))
   (serial :uint32))
 
 (define-wlr-func seat start-pointer-drag :void
-  (drag :pointer)
+  (drag (:pointer (:struct drag)))
   (serial :uint32))
 
 (define-wlr-func seat start-touch-drag :void
-  (drag :pointer)
+  (drag (:pointer (:struct drag)))
   (serial :uint32)
-  (point :pointer))
+  (point (:pointer (:struct touch-point))))
 
 (define-wlr-func data-source init :void
-  (impl :pointer))
+  (impl (:pointer (:struct data-source-impl))))
 
 (define-wlr-func data-source send :void
   (mime-type :string)

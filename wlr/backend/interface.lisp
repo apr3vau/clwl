@@ -9,6 +9,6 @@
 (export 'backend-impl)
 
 (define-wlr-func backend init :void
-  (impl :pointer))
+  (impl (:pointer (:struct backend-impl))))
 
 (define-wlr-func backend finish :void)

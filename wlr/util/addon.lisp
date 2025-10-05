@@ -15,7 +15,7 @@
   (:link (:struct wl:list)))
 
 (defcstruct addon
-  (:impl :pointer)
+  (:impl (:pointer (:struct addon-interface)))
   (:private (:struct addon-private)))
 
 (export '(addon-set-private addon-set addon-interface addon-private addon))
@@ -24,13 +24,13 @@
 (define-wlr-func addon-set finish :void)
 
 (define-wlr-func addon init :void
-  (addon-set :pointer)
+  (addon-set (:pointer (:struct addon-set)))
   (owner :pointer)
-  (impl :pointer))
+  (impl (:pointer (:struct addon-interface))))
 (define-wlr-func addon finish :void)
 
-(defcfun ("wlr_addon_find" addon-find) :pointer
-  (addon-set :pointer)
+(defcfun ("wlr_addon_find" addon-find) (:pointer (:struct addon))
+  (addon-set (:pointer (:struct addon-set)))
   (owner :pointer)
-  (impl :pointer))
+  (impl (:pointer (:struct addon-interface))))
 (export 'addon-find)

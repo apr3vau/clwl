@@ -65,3 +65,7 @@
 (defcstruct resource)
 (defcstruct shm-buffer)
 (defcstruct shm-pool)
+
+(cl:export '(display proxy event-queue surface egl-window object
+             event-loop event-source global client resource
+             shm-buffer shm-pool))

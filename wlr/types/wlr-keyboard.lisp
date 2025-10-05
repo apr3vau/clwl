@@ -53,8 +53,8 @@
   (:update-state :bool)
   (:state :int))
 
-(defcfun ("wlr_keyboard_from_input_device" keyboard-from-input-device) :pointer
-  (input-device :pointer))
+(defcfun ("wlr_keyboard_from_input_device" keyboard-from-input-device) (:pointer (:struct keyboard))
+  (input-device (:pointer (:struct input-device))))
 (export 'keyboard-from-input-device)
 
 (define-wlr-func keyboard set-keymap :bool

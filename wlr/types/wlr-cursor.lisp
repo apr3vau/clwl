@@ -34,40 +34,40 @@
   (:data :pointer))
 (export 'cursor)
 
-(defcfun ("wlr_cursor_create" cursor-create) :pointer)
+(defcfun ("wlr_cursor_create" cursor-create) (:pointer (:struct cursor)))
 (export 'cursor-create)
 
 (define-wlr-func cursor destroy :void)
 
 (define-wlr-func cursor warp :bool
-  (device :pointer)
+  (device (:pointer (:struct input-device)))
   (lx :double)
   (ly :double))
 
 (define-wlr-func cursor absolute-to-layout-coords :void
-  (device :pointer)
+  (device (:pointer (:struct input-device)))
   (x :double)
   (y :double)
   (lx (:pointer :double))
   (ly (:pointer :double)))
 
 (define-wlr-func cursor warp-closest :void
-  (device :pointer)
+  (device (:pointer (:struct input-device)))
   (x :double)
   (y :double))
 
 (define-wlr-func cursor warp-absolute :void
-  (device :pointer)
+  (device (:pointer (:struct input-device)))
   (x :double)
   (y :double))
 
 (define-wlr-func cursor move :void
-  (device :pointer)
+  (device (:pointer (:struct input-device)))
   (delta-x :double)
   (delta-y :double))
 
 (define-wlr-func cursor set-buffer :void
-  (buffer :pointer)
+  (buffer (:pointer (:struct buffer)))
   (hotspot-x :int32)
   (hotspot-y :int32)
   (scale :float))
@@ -75,33 +75,33 @@
 (define-wlr-func cursor unset-image :void)
 
 (define-wlr-func cursor set-xcursor :void
-  (manager :pointer)
+  (manager (:pointer (:struct xcursor-manager)))
   (name :string))
 
 (define-wlr-func cursor set-surface :void
-  (surface :pointer)
+  (surface (:pointer (:struct surface)))
   (hotspot-x :int32)
   (hotspot-y :int32))
 
 (define-wlr-func cursor attach-input-device :void
-  (device :pointer))
+  (device (:pointer (:struct input-device))))
 
 (define-wlr-func cursor detach-input-device :void
-  (device :pointer))
+  (device (:pointer (:struct input-device))))
 
 (define-wlr-func cursor attach-output-layout :void
-  (output-layout :pointer))
+  (output-layout (:pointer (:struct output-layout))))
 
 (define-wlr-func cursor map-to-output :void
-  (output :pointer))
+  (output (:pointer (:struct output))))
 
 (define-wlr-func cursor map-input-to-output :void
-  (device :pointer)
-  (output :pointer))
+  (device (:pointer (:struct input-device)))
+  (output (:pointer (:struct output))))
 
 (define-wlr-func cursor map-to-region :void
   (box (:pointer (:struct box))))
 
 (define-wlr-func cursor map-input-to-region :void
-  (device :pointer)
+  (device (:pointer (:struct input-device)))
   (box (:pointer (:struct box))))

@@ -11,9 +11,9 @@
 (define-wlr-private-listener subsurface surface-client-commit parent-destroy)
 
 (defcstruct subsurface
-  (:resource :pointer)
-  (:surface :pointer)
-  (:parent :pointer)
+  (:resource (:pointer (:struct wl:resource)))
+  (:surface (:pointer (:struct surface)))
+  (:parent (:pointer (:struct surface)))
   (:current (:struct subsurface-parent-state))
   (:pending (:struct subsurface-parent-state))
   (:cached-seq :uint32)
@@ -33,12 +33,12 @@
   (:events (:struct subcompositor-events))
   (:private (:struct subcompositor-private)))
 
-(defcfun ("wlr_subsurface_try_from_wlr_surface" subsurface-try-from-wlr-surface) :pointer
-  (surface :pointer))
+(defcfun ("wlr_subsurface_try_from_wlr_surface" subsurface-try-from-wlr-surface) (:pointer (:struct subsurface))
+  (surface (:pointer (:struct surface))))
 (export 'subsurface-try-from-wlr-surface)
 
-(defcfun ("wlr_subcompositor_create" subcompositor-create) :pointer
-  (display :pointer))
+(defcfun ("wlr_subcompositor_create" subcompositor-create) (:pointer (:struct subcompositor))
+  (display (:pointer (:struct wl:display))))
 (export 'subcompositor-create)
 
 (export '(subsurface subsurface-parent-state subcompositor))

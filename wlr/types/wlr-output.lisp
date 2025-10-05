@@ -235,7 +235,7 @@
   (allocator :pointer)
   (renderer :pointer))
 
-(define-wlr-func output preferred-mode :pointer)
+(define-wlr-func output preferred-mode (:pointer (:struct output-mode)))
 
 (define-wlr-func output set-name :void
   (name :string))
@@ -256,17 +256,17 @@
   (height (:pointer :int)))
 
 (define-wlr-func output test-state :bool
-  (state :pointer))
+  (state (:pointer (:struct output-state))))
 
 (define-wlr-func output commit-state :bool
-  (state :pointer))
+  (state (:pointer (:struct output-state))))
 
 (define-wlr-func output schedule-frame :void)
 
 (define-wlr-func output get-gamma-size :unsigned-long-long)
 
-(defcfun ("wlr_output_from_resource" output-from-resource) :pointer
-  (resource :pointer))
+(defcfun ("wlr_output_from_resource" output-from-resource) (:pointer (:struct output))
+  (resource (:pointer (:struct wl:resource))))
 (export 'output-from-resource)
 
 (define-wlr-func output lock-attach-render :void
@@ -276,8 +276,8 @@
   (lock :bool))
 
 (define-wlr-func output add-software-cursors-to-render-pass :void
-  (render-pass :pointer)
-  (damage :pointer))
+  (render-pass (:pointer (:struct render-pass)))
+  (damage (:pointer (:struct pixman-region32))))
 
 (define-wlr-func output get-primary-formats :pointer
   (buffer-caps :uint32))
@@ -285,10 +285,10 @@
 (define-wlr-func output is-direct-scanout-allowed :bool)
 
 
-(define-wlr-func output cursor-create :pointer)
+(define-wlr-func output cursor-create (:pointer (:struct output-cursor)))
 
 (define-wlr-func output-cursor set-buffer :bool
-  (buffer :pointer)
+  (buffer (:pointer (:struct buffer)))
   (hotspot-x :int32)
   (hotspot-y :int32))
 
@@ -306,7 +306,7 @@
   (enabled :bool))
 
 (define-wlr-func output-state set-mode :void
-  (mode :pointer))
+  (mode (:pointer (:struct output-mode))))
 
 (define-wlr-func output-state set-custom-mode :void
   (width :int32)
@@ -360,6 +360,6 @@
   (state :pointer)
   (swapchain :pointer))
 
-(define-wlr-func output begin-render-pass :pointer
-  (state :pointer)
-  (render-options :pointer))
+(define-wlr-func output begin-render-pass (:pointer (:struct render-pass))
+  (state (:pointer (:struct output-state)))
+  (render-options (:pointer (:struct buffer-pass-options))))

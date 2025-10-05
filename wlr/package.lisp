@@ -34,7 +34,7 @@
                             "WLR")))
     `(eval-when (:compile-toplevel :load-toplevel :execute)
        (defcfun (,c-name ,lisp-name) ,ret-type
-         (,object :pointer)
+         (,object (:pointer (:struct ,object)))
          ,@args)
        (export ',lisp-name))))
 

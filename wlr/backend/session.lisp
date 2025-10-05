@@ -19,10 +19,10 @@
   (:seat :string)
   (:udev :pointer)
   (:udev-monitor :pointer)
-  (:udev-event :pointer)
+  (:udev-event (:pointer (:struct wl:event-source)))
   (:seat-handle :pointer)
   (:devices (:struct wl:list))
-  (:event-loop :pointer)
+  (:event-loop (:pointer (:struct wl:event-loop)))
   (:events (:struct session-events))
   (:private (:struct session-private)))
 (export 'session)
@@ -48,20 +48,20 @@
   (:union (:union device-hotplug-union)))
 (export 'device-change-event)
 
-(defcfun ("wlr_session_create" session-create) :pointer
-  (event-loop :pointer))
+(defcfun ("wlr_session_create" session-create) (:pointer (:struct session))
+  (event-loop (:pointer (:struct wl:event-loop))))
 
 (define-wlr-func session destroy :void)
 
-(define-wlr-func session open-file :pointer
+(define-wlr-func session open-file (:pointer (:struct device))
   (path :string))
 
 (define-wlr-func session close-file :void
-  (device :pointer))
+  (device (:pointer (:struct device))))
 
 (define-wlr-func session change-vt :bool
   (vt :unsigned-int))
 
 (define-wlr-func session find-gpus :long-long
   (return-len :unsigned-long-long)
-  (ret :pointer))
+  (ret (:pointer (:pointer (:struct device)))))

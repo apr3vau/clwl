@@ -22,6 +22,7 @@
                (:file "wlr/types/wlr-cursor")
                (:file "wlr/types/wlr-keyboard")
                (:file "wlr/types/wlr-pointer")
+               (:file "wlr/types/wlr-buffer")
                (:file "wlr/types/wlr-seat")
                (:file "wlr/types/wlr-data-device")
                (:file "wlr/types/wlr-output-layout")
