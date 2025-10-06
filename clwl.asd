@@ -2,7 +2,7 @@
   :author "April & May & June"
   :description "Common Lisp bindings for libwayland-server and libwayland-client"
   :license "0BSD"
-  :depends-on (:alexandria :cffi)
+  :depends-on (:cffi)
   :components ((:file "wl/package")
                (:file "wl/wayland-util")
                (:file "wl/wayland-server-core")

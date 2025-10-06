@@ -1,4 +1,4 @@
-(in-package "WLR")
+(in-package "WL-UTIL")
 
 (defcstruct pixman-region32-data
   (size :long)

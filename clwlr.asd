@@ -2,10 +2,8 @@
   :author "April & May & June"
   :description "Common Lisp bindings for wlroots"
   :license "0BSD"
-  :depends-on (:clwl)
+  :depends-on (:clwl :clwl-util)
   :components ((:file "wlr/package")
-               ;; Dependencies
-               (:file "wlr/pixman")
                ;; Util
                (:file "wlr/util/box")
                (:file "wlr/util/log")

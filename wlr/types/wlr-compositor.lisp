@@ -25,10 +25,10 @@
   (:buffer :pointer)
   (:dx :int32)
   (:dy :int32)
-  (:surface-damage (:struct pixman-region32))
-  (:buffer-damage (:struct pixman-region32))
-  (:opaque (:struct pixman-region32))
-  (:input (:struct pixman-region32))
+  (:surface-damage (:struct wl-util:pixman-region32))
+  (:buffer-damage (:struct wl-util:pixman-region32))
+  (:opaque (:struct wl-util:pixman-region32))
+  (:input (:struct wl-util:pixman-region32))
   (:transform :int)
   (:scale :int32)
   (:frame-callback-list (:struct wl:list))
@@ -95,9 +95,9 @@
   (:resource :pointer)
   (:compositor :pointer)
   (:buffer :pointer)
-  (:buffer-damage (:struct pixman-region32))
-  (:opaque-region (:struct pixman-region32))
-  (:input-region (:struct pixman-region32))
+  (:buffer-damage (:struct wl-util:pixman-region32))
+  (:opaque-region (:struct wl-util:pixman-region32))
+  (:input-region (:struct wl-util:pixman-region32))
   (:current (:struct surface-state))
   (:pending (:struct surface-state))
   (:cached (:struct wl:list))
@@ -204,7 +204,7 @@
   (user-data :pointer))
 
 (define-wlr-func surface get-effective-damage :void
-  (damage (:pointer (:struct pixman-region32))))
+  (damage (:pointer (:struct wl-util:pixman-region32))))
 
 (define-wlr-func surface get-buffer-source-box :void
   (box (:pointer (:struct fbox))))
@@ -231,7 +231,7 @@
 (define-wlr-func surface-synced get-state (:pointer (:struct surface-state))
   (state (:pointer (:struct surface-state))))
 
-(defcfun ("wlr_region_from_resource" region-from-resource) (:pointer (:struct pixman-region32))
+(defcfun ("wlr_region_from_resource" region-from-resource) (:pointer (:struct wl-util:pixman-region32))
   (resource (:pointer (:struct wl:resource))))
 (export 'region-from-resource)
 

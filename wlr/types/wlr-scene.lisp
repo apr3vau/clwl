@@ -9,7 +9,7 @@
   (:buffers (:struct wl:list)))
 
 (defcstruct damage-ring
-  (:current (:struct pixman-region32))
+  (:current (:struct wl-util:pixman-region32))
   (:private (:struct damage-ring-private)))
 
 (defcenum scene-node-type
@@ -87,7 +87,7 @@
   (:dst-width :int)
   (:dst-height :int)
   (:transform :int)
-  (:opaque-region (:struct pixman-region32))
+  (:opaque-region (:struct wl-util:pixman-region32))
   (:private :pointer))
 
 (define-wlr-events-struct scene-output destroy)
@@ -115,7 +115,7 @@
   (:private :pointer))
 
 (defcstruct scene-buffer-set-buffer-options
-  (:damage (:pointer (:struct pixman-region32)))
+  (:damage (:pointer (:struct wl-util:pixman-region32)))
   (:wait-timeline :pointer)
   (:wait-point :uint64))
 
@@ -216,14 +216,14 @@
 
 (define-wlr-func scene-buffer set-buffer-with-damage :void
   (buffer (:pointer (:struct buffer)))
-  (region (:pointer (:struct pixman-region32))))
+  (region (:pointer (:struct wl-util:pixman-region32))))
 
 (define-wlr-func scene-buffer set-buffer-with-options :void
   (buffer (:pointer (:struct buffer)))
   (options (:pointer (:struct scene-buffer-set-buffer-options))))
 
 (define-wlr-func scene-buffer set-opaque-region :void
-  (region (:pointer (:struct pixman-region32))))
+  (region (:pointer (:struct wl-util:pixman-region32))))
 
 (define-wlr-func scene-buffer set-source-box :void
   (box (:pointer (:struct fbox))))

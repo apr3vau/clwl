@@ -65,7 +65,7 @@
 (defcstruct output-state
   (:committed :uint32)
   (:allow-reconfiguration :bool)
-  (:damage (:struct pixman-region32))
+  (:damage (:struct wl-util:pixman-region32))
   (:enabled :bool)
   (:scale :float)
   (:transform :int)
@@ -277,7 +277,7 @@
 
 (define-wlr-func output add-software-cursors-to-render-pass :void
   (render-pass (:pointer (:struct render-pass)))
-  (damage (:pointer (:struct pixman-region32))))
+  (damage (:pointer (:struct wl-util:pixman-region32))))
 
 (define-wlr-func output get-primary-formats :pointer
   (buffer-caps :uint32))

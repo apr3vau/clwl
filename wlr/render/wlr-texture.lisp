@@ -40,7 +40,7 @@
 
 (define-wlr-func texture update-from-buffer :bool
   (buffer (:pointer (:struct buffer)))
-  (damage (:pointer (:struct pixman-region32))))
+  (damage (:pointer (:struct wl-util:pixman-region32))))
 
 (define-wlr-func texture destroy :void)
 
