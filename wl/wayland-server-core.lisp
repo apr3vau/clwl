@@ -1,5 +1,7 @@
 (cl:in-package "WL")
 
+(defcstruct listener)
+
 (defcenum event
   (:readable 1)
   (:writable 2)

@@ -2,6 +2,7 @@
 
 (defcstruct backend)
 (defcstruct renderer)
+(defcstruct allocator)
 
 (defcstruct allocator-interface
   (:create-buffer :pointer)

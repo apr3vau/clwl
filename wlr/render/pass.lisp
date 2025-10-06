@@ -2,6 +2,7 @@
 
 (defcstruct buffer)
 (defcstruct texture)
+(defcstruct renderer)
 (defcstruct render-pass)
 (defcstruct render-timer)
 
@@ -30,7 +31,7 @@
   (:src-box (:struct fbox))
   (:dst-box (:struct box))
   (:alpha :float)
-  (:clip (:pointer (:struct pixman-region32)))
+  (:clip (:pointer (:struct wl-util:pixman-region32)))
   (:transform :int)
   (:filter-mode :int)
   (:blend-mode :int)
@@ -49,7 +50,7 @@
 (defcstruct render-rect-options
   (:box (:struct box))
   (:color (:struct render-color))
-  (:clip (:pointer (:struct pixman-region32)))
+  (:clip (:pointer (:struct wl-util:pixman-region32)))
   (:blend-mode :int))
 
 (export '(buffer-pass-options renderer-texture-options render-color render-rect-options))
