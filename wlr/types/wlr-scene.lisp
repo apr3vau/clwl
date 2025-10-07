@@ -312,4 +312,4 @@
   (drag-icon (:pointer (:struct drag-icon))))
 (export 'scene-drag-icon-create)
 
-(export '(scene scene-node scene-tree scene-surface scene-buffer scene-rect scene-output scene-output-layout scene-layer-surface-v1 scene-buffer-set-buffer-options scene-output-state-options scene-timer))
+(export '(scene scene-node scene-node-type scene-tree scene-surface scene-buffer scene-rect scene-output scene-output-layout scene-layer-surface-v1 scene-buffer-set-buffer-options scene-output-state-options scene-timer))
