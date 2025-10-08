@@ -30,6 +30,11 @@
 (defvar *keyboards* nil)
 (defstruct keyboard wlr-keyboard modifiers key destroy)
 
+(defvar *focused-toplevel* nil)
+(defvar *toplevels* nil)
+(defstruct toplevel xdg-toplevel scene-tree map unmap commit destroy
+                    request-move request-resize request-maximize request-fullscreen)
+
 (cffi:defcallback server-new-output :void ((listener :pointer) (data :pointer))
   (declare (ignore listener data))
   (format t "New output created~%"))
@@ -52,12 +57,45 @@
        *seat*
        (cffi:foreign-slot-pointer (keyboard-wlr-keyboard kb) '(:struct wlr:keyboard) :modifiers)))))
 
+(defun focus-toplevel (toplevel)
+  (when toplevel
+    (let ((prev-surface (cffi:foreign-slot-pointer
+                         (cffi:foreign-slot-pointer *seat* '(:struct wlr:seat) :keyboard-state)
+                         '(:struct wlr:seat-keyboard-state)
+                         :focused-surface))
+          (surface (cffi:foreign-slot-pointer
+                    (cffi:foreign-slot-pointer (toplevel-xdg-toplevel toplevel) '(:struct wlr:xdg-toplevel) :base)
+                    '(:struct wlr:xdg-surface)
+                    :surface)))
+      (unless (cffi:pointer-eq prev-surface surface)
+        (unless (cffi:null-pointer-p prev-surface)
+          (let ((prev-toplevel (wlr:xdg-toplevel-try-from-wlr-surface prev-surface)))
+            (when prev-toplevel
+              (wlr:xdg-toplevel-set-activated prev-toplevel nil))))
+        (wlr:scene-node-raise-to-top (cffi:foreign-slot-pointer (toplevel-scene-tree toplevel)
+                                                                '(:struct wlr:scene-tree)
+                                                                :node))
+        (wlr:xdg-toplevel-set-activated (toplevel-xdg-toplevel toplevel) t)
+        (let ((keyboard (wlr:seat-get-keyboard *seat*)))
+          (when keyboard
+            (wlr:seat-keyboard-notify-enter
+             *seat*
+             surface
+             (cffi:foreign-slot-value keyboard '(:struct wlr:keyboard) :keycodes)
+             (cffi:foreign-slot-value keyboard '(:struct wlr:keyboard) :num-keycodes)
+             (cffi:foreign-slot-value keyboard '(:struct wlr:keyboard) :modifiers))))))))
+
 (defun handle-keybinding (keycode)
   (format t "Keycode: ~a~%" keycode)
   (case keycode
     (9 (format t "Escape key pressed, exiting...~%")
        (wl:display-terminate *display*)
-       t)))
+       t)
+    (67 (format t "F1 key pressed, switching toplevel")
+        (when (> (length *toplevels*) 1)
+          (focus-toplevel (nth (mod (+ (position *focused-toplevel* *toplevels*) 1)
+                               (length *toplevels*))
+                             *toplevels*))))))
 
 (cffi:defcallback keyboard-handle-key :void ((listener :pointer) (data :pointer))
   (format t "Keyboard key event~%")
