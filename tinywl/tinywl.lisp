@@ -35,27 +35,8 @@
 (defstruct toplevel xdg-toplevel scene-tree map unmap commit destroy
                     request-move request-resize request-maximize request-fullscreen)
 
-(cffi:defcallback server-new-output :void ((listener :pointer) (data :pointer))
-  (declare (ignore listener data))
-  (format t "New output created~%"))
-
-(cffi:defcallback server-new-xdg-toplevel :void ((listener :pointer) (data :pointer))
-  (declare (ignore listener data))
-  (format t "New XDG toplevel created~%"))
-
-(cffi:defcallback server-new-xdg-popup :void ((listener :pointer) (data :pointer))
-  (declare (ignore listener data))
-  (format t "New XDG popup created~%"))
-
-(cffi:defcallback keyboard-handle-modifiers :void ((listener :pointer) (data :pointer))
-  (declare (ignore data))
-  (format t "Keyboard modifiers changed~%")
-  (let ((kb (find-if (lambda (k) (cffi:pointer-eq (keyboard-modifiers k) listener)) *keyboards*)))
-    (when kb
-      (wlr:seat-set-keyboard *seat* (keyboard-wlr-keyboard kb))
-      (wlr:seat-keyboard-notify-modifiers
-       *seat*
-       (cffi:foreign-slot-pointer (keyboard-wlr-keyboard kb) '(:struct wlr:keyboard) :modifiers)))))
+(defvar *outputs* nil)
+(defstruct output wlr-output frame request-state destroy)
 
 (defun focus-toplevel (toplevel)
   (when toplevel
@@ -84,6 +65,16 @@
              (cffi:foreign-slot-value keyboard '(:struct wlr:keyboard) :keycodes)
              (cffi:foreign-slot-value keyboard '(:struct wlr:keyboard) :num-keycodes)
              (cffi:foreign-slot-value keyboard '(:struct wlr:keyboard) :modifiers))))))))
+
+(cffi:defcallback keyboard-handle-modifiers :void ((listener :pointer) (data :pointer))
+  (declare (ignore data))
+  (format t "Keyboard modifiers changed~%")
+  (let ((kb (find-if (lambda (k) (cffi:pointer-eq (keyboard-modifiers k) listener)) *keyboards*)))
+    (when kb
+      (wlr:seat-set-keyboard *seat* (keyboard-wlr-keyboard kb))
+      (wlr:seat-keyboard-notify-modifiers
+       *seat*
+       (cffi:foreign-slot-pointer (keyboard-wlr-keyboard kb) '(:struct wlr:keyboard) :modifiers)))))
 
 (defun handle-keybinding (keycode)
   (format t "Keycode: ~a~%" keycode)
@@ -176,6 +167,66 @@
       (setf caps (logior caps (cffi:foreign-enum-value 'wl:seat-capability :keyboard))))
     (wlr:seat-set-capabilities *seat* caps))))
 
+(cffi:defcallback seat-request-set-cursor :void ((listener :pointer) (data :pointer))
+  (declare (ignore listener data))
+  (format t "Seat requested set cursor~%"))
+
+(cffi:defcallback seat-request-set-selection :void ((listener :pointer) (data :pointer))
+  (declare (ignore listener data))
+  (format t "Seat requested set selection~%"))
+
+(defun desktop-toplevel-at (lx ly sx sy)
+  (let ((node (wlr:scene-node-at (cffi:foreign-slot-pointer (cffi:foreign-slot-pointer *scene* '(:struct wlr:scene) :tree)
+                                                            '(:struct wlr:scene-tree)
+                                                            :node)
+                                 lx ly sx sy)))
+    (when (or (cffi:null-pointer-p node)
+              (cffi:with-foreign-slots (((type :type)) node (:struct wlr:scene-node))
+                (not (eql type (cffi:foreign-enum-value 'wlr:scene-node-type :buffer)))))
+      (return-from desktop-toplevel-at (cffi:null-pointer)))
+    (let* ((scene-buffer (wlr:scene-buffer-from-node node))
+           (scene-surface (wlr:scene-surface-try-from-buffer scene-buffer)))
+      (when (cffi:null-pointer-p scene-surface)
+        (return-from desktop-toplevel-at (cffi:null-pointer)))
+      (let ((tree (cffi:foreign-slot-pointer node '(:struct wlr:scene-node) :parent)))
+        (loop while (and (not (cffi:null-pointer-p tree))
+                         (not (cffi:null-pointer-p 
+                               (cffi:foreign-slot-pointer (cffi:foreign-slot-pointer tree '(:struct wlr:scene-tree) :node)
+                                                          '(:struct wlr:scene-node)
+                                                          :data))))
+              do (setf tree (cffi:foreign-slot-pointer (cffi:foreign-slot-pointer tree '(:struct wlr:scene-tree) :node)
+                                                       '(:struct wlr:scene-node)
+                                                       :parent)))
+        (values (cffi:foreign-slot-pointer 
+                  (cffi:foreign-slot-pointer tree '(:struct wlr:scene-tree) :node)
+                  '(:struct wlr:scene-node)
+                  :data)
+                (cffi:foreign-slot-pointer scene-surface '(:struct wlr:scene-surface) :surface))))))
+
+(defun process-cursor-move ())
+
+(defun process-cursor-resize ())
+
+(defun process-cursor-motion (time)
+  (case *cursor-mode*
+    (:passthrough
+     (cffi:with-foreign-objects ((sx :double) (sy :double) (sx-ptr :pointer) (sy-ptr :pointer))
+       (setf (cffi:mem-aref sx-ptr :pointer) sx
+             (cffi:mem-aref sy-ptr :pointer) sy)
+       (multiple-value-bind (toplevel surface)
+           (desktop-toplevel-at (cffi:foreign-slot-value *cursor* '(:struct wlr:cursor) :x)
+                                (cffi:foreign-slot-value *cursor* '(:struct wlr:cursor) :y)
+                                sx-ptr
+                                sy-ptr)
+        (when (cffi:null-pointer-p toplevel)
+          (wlr:cursor-set-xcursor *cursor* *cursor-manager* "default"))
+        (if (cffi:null-pointer-p surface)
+          (wlr:seat-pointer-clear-focus *seat*)
+          (progn (wlr:seat-pointer-notify-enter *seat* surface sx sy)
+                 (wlr:seat-pointer-notify-motion *seat* time sx sy))))))
+    (:move (process-cursor-move))
+    (:resize (process-cursor-resize))))
+
 (cffi:defcallback server-cursor-motion :void ((listener :pointer) (data :pointer))
   (declare (ignore listener data))
   (format t "Cursor motion event~%"))
@@ -196,13 +247,66 @@
   (declare (ignore listener data))
   (format t "Cursor frame event~%"))
 
-(cffi:defcallback seat-request-set-cursor :void ((listener :pointer) (data :pointer))
+(cffi:defcallback output-frame :void ((listener :pointer) (data :pointer))
   (declare (ignore listener data))
-  (format t "Seat requested set cursor~%"))
+  (format t "Output frame event~%"))
 
-(cffi:defcallback seat-request-set-selection :void ((listener :pointer) (data :pointer))
+(cffi:defcallback output-request-state :void ((listener :pointer) (data :pointer))
   (declare (ignore listener data))
-  (format t "Seat requested set selection~%"))
+  (format t "Output request state event~%"))
+
+(cffi:defcallback output-destroy :void ((listener :pointer) (data :pointer))
+  (declare (ignore listener data))
+  (format t "Output destroy event~%")
+  (let* ((out (find-if (lambda (o) (cffi:pointer-eq (output-destroy o) listener)) *outputs*)))
+    (when out
+      (setf *outputs* (remove out *outputs*))
+      (wl:list-remove (cffi:foreign-slot-pointer (output-frame out) '(:struct wl:listener) :link))
+      (wl:list-remove (cffi:foreign-slot-pointer (output-request-state out) '(:struct wl:listener) :link))
+      (wl:list-remove (cffi:foreign-slot-pointer (output-destroy out) '(:struct wl:listener) :link)))))
+
+(cffi:defcallback server-new-output :void ((listener :pointer) (wlr-output :pointer))
+  (declare (ignore listener))
+  (format t "New output created~%")
+  (wlr:output-init-render wlr-output *allocator* *renderer*)
+  (cffi:with-foreign-object (state '(:struct wlr:output-state))
+    (wlr:output-state-init state)
+    (wlr:output-state-set-enabled state t)
+    (let ((mode (wlr:output-preferred-mode wlr-output)))
+      (unless (cffi:null-pointer-p mode)
+        (wlr:output-state-set-mode state mode)))
+    (wlr:output-commit-state wlr-output state)
+    (wlr:output-state-finish state))
+
+  (let* ((frame (cffi:foreign-alloc '(:struct wl:listener)))
+         (request-state (cffi:foreign-alloc '(:struct wl:listener)))
+         (destroy (cffi:foreign-alloc '(:struct wl:listener)))
+         (output (make-output :wlr-output wlr-output
+                              :frame frame
+                              :request-state request-state
+                              :destroy destroy)))
+    (setf (cffi:foreign-slot-value frame '(:struct wl:listener) :notify)
+          (cffi:callback output-frame)
+          (cffi:foreign-slot-value request-state '(:struct wl:listener) :notify)
+          (cffi:callback output-request-state)
+          (cffi:foreign-slot-value destroy '(:struct wl:listener) :notify)
+          (cffi:callback output-destroy))
+    (wl:signal-add (wlr:event-signal wlr-output wlr:output :frame) frame)
+    (wl:signal-add (wlr:event-signal wlr-output wlr:output :request-state) request-state)
+    (wl:signal-add (wlr:event-signal wlr-output wlr:output :destroy) destroy)
+    (push output *outputs*))
+
+  (let ((l-output (wlr:output-layout-add-auto *output-layout* wlr-output))
+        (scene-output (wlr:scene-output-create *scene* wlr-output)))
+    (wlr:scene-output-layout-add-output *scene-layout* l-output scene-output)))
+
+(cffi:defcallback server-new-xdg-toplevel :void ((listener :pointer) (data :pointer))
+  (declare (ignore listener data))
+  (format t "New XDG toplevel created~%"))
+
+(cffi:defcallback server-new-xdg-popup :void ((listener :pointer) (data :pointer))
+  (declare (ignore listener data))
+  (format t "New XDG popup created~%"))
 
 (defun main ()
   (setf *display* (wl:display-create))
