@@ -9,23 +9,23 @@
 (define-wlr-private-listener xdg-shell display-destroy)
 
 (defcstruct xdg-shell
-  (:global :pointer)
+  (:global (:pointer (:struct wl:global)))
   (:version :uint32)
   (:clients (:struct wl:list))
   (:popup-grabs (:struct wl:list))
   (:ping-timeout :uint32)
   (:events (:struct xdg-shell-events))
-  (:data :pointer)
+  (:data (:pointer :void))
   (:private (:struct xdg-shell-private)))
 
 (defcstruct xdg-client
-  (:shell :pointer)
-  (:resource :pointer)
-  (:client :pointer)
+  (:shell (:pointer (:struct xdg-shell)))
+  (:resource (:pointer (:struct wl:resource)))
+  (:client (:pointer (:struct wl:client)))
   (:surfaces (:struct wl:list))
   (:link (:struct wl:list))
   (:ping-serial :uint32)
-  (:ping-timer :pointer))
+  (:ping-timer (:pointer (:struct wl:event-source))))
 
 (defcstruct xdg-positioner-size
   (:width :int32)
@@ -48,7 +48,7 @@
   (:offset (:struct xdg-positioner-offset)))
 
 (defcstruct xdg-positioner
-  (:resource :pointer)
+  (:resource (:pointer (:struct wl:resource)))
   (:rules (:struct xdg-positioner-rules)))
 
 (defcstruct xdg-popup-state
@@ -72,11 +72,11 @@
   (:synced (:struct surface-synced)))
 
 (defcstruct xdg-popup
-  (:base :pointer)
+  (:base (:pointer (:struct xdg-surface)))
   (:link (:struct wl:list))
-  (:resource :pointer)
-  (:parent :pointer)
-  (:seat :pointer)
+  (:resource (:pointer (:struct wl:resource)))
+  (:parent (:pointer (:struct surface)))
+  (:seat (:pointer (:struct seat)))
   (:scheduled (:struct xdg-popup-configure))
   (:current (:struct xdg-popup-state))
   (:pending (:struct xdg-popup-state))
@@ -87,11 +87,11 @@
 (define-wlr-private-listener xdg-popup-grab seat-destroy)
 
 (defcstruct xdg-popup-grab
-  (:client :pointer)
+  (:client (:pointer (:struct wl:client)))
   (:pointer-grab (:struct seat-pointer-grab))
   (:keyboard-grab (:struct seat-keyboard-grab))
   (:touch-grab (:struct seat-touch-grab))
-  (:seat :pointer)
+  (:seat (:pointer (:struct seat)))
   (:popups (:struct wl:list))
   (:link (:struct wl:list))
   (:private (:struct xdg-popup-grab-private)))
@@ -148,7 +148,7 @@
   (:maximized :bool)
   (:minimized :bool)
   (:fullscreen :bool)
-  (:fullscreen-output :pointer)
+  (:fullscreen-output (:pointer (:struct output)))
   (:private (:struct xdg-toplevel-requested-private)))
 
 (define-wlr-events-struct xdg-toplevel
@@ -168,9 +168,9 @@
   (:parent-unmap (:struct wl:listener)))
 
 (defcstruct xdg-toplevel
-  (:resource :pointer)
-  (:base :pointer)
-  (:parent :pointer)
+  (:resource (:pointer (:struct wl:resource)))
+  (:base (:pointer (:struct xdg-surface)))
+  (:parent (:pointer (:struct xdg-toplevel)))
   (:current (:struct xdg-toplevel-state))
   (:pending (:struct xdg-toplevel-state))
   (:scheduled (:struct xdg-toplevel-configure))
@@ -181,11 +181,11 @@
   (:private (:struct xdg-toplevel-private)))
 
 (defcstruct xdg-surface-configure
-  (:surface :pointer)
+  (:surface (:pointer (:struct xdg-surface)))
   (:link (:struct wl:list))
   (:serial :uint32)
-  (:toplevel-configure :pointer)
-  (:popup-configure :pointer))
+  (:toplevel-configure (:pointer (:struct xdg-toplevel-configure)))
+  (:popup-configure (:pointer (:struct xdg-popup-configure))))
 
 (defcenum xdg-surface-state-field
   (:window-geometry 1))
@@ -207,17 +207,17 @@
   (:role-resource-destroy (:struct wl:listener)))
 
 (defcstruct xdg-surface
-  (:client :pointer)
-  (:resource :pointer)
-  (:surface :pointer)
+  (:client (:pointer (:struct xdg-client)))
+  (:resource (:pointer (:struct wl:resource)))
+  (:surface (:pointer (:struct surface)))
   (:link (:struct wl:list))
   (:role :int)
-  (:role-resource :pointer)
-  (:toplevel :pointer)
-  (:popup :pointer)
+  (:role-resource (:pointer (:struct wl:resource)))
+  (:toplevel (:pointer (:struct xdg-toplevel)))
+  (:popup (:pointer (:struct xdg-popup)))
   (:popups (:struct wl:list))
   (:configured :bool)
-  (:configure-idle :pointer)
+  (:configure-idle (:pointer (:struct wl:event-source)))
   (:scheduled-serial :uint32)
   (:configure-list (:struct wl:list))
   (:current (:struct xdg-surface-state))
@@ -226,23 +226,23 @@
   (:initial-commit :bool)
   (:geometry (:struct box))
   (:events (:struct xdg-surface-events))
-  (:data :pointer)
+  (:data (:pointer :void))
   (:private (:struct xdg-surface-private)))
 
 (defcstruct xdg-toplevel-move-event
-  (:toplevel :pointer)
-  (:seat :pointer)
+  (:toplevel (:pointer (:struct xdg-toplevel)))
+  (:seat (:pointer (:struct seat-client)))
   (:serial :uint32))
 
 (defcstruct xdg-toplevel-resize-event
-  (:toplevel :pointer)
-  (:seat :pointer)
+  (:toplevel (:pointer (:struct xdg-toplevel)))
+  (:seat (:pointer (:struct seat-client)))
   (:serial :uint32)
   (:edges :uint32))
 
 (defcstruct xdg-toplevel-show-window-menu-event
-  (:toplevel :pointer)
-  (:seat :pointer)
+  (:toplevel (:pointer (:struct xdg-toplevel)))
+  (:seat (:pointer (:struct seat-client)))
   (:serial :uint32)
   (:x :int32)
   (:y :int32))
@@ -305,7 +305,7 @@
 (define-wlr-func xdg-toplevel send-close :void)
 
 (define-wlr-func xdg-toplevel set-parent :bool
-  (parent :pointer))
+  (parent (:pointer (:struct xdg-toplevel))))
 
 (define-wlr-func xdg-popup destroy :void)
 
@@ -357,11 +357,11 @@
 
 (define-wlr-func xdg-surface for-each-surface :void
   (iterator surface-iterator-func)
-  (user-data :pointer))
+  (user-data (:pointer :void)))
 
 (define-wlr-func xdg-surface for-each-popup-surface :void
   (iterator surface-iterator-func)
-  (user-data :pointer))
+  (user-data (:pointer :void)))
 
 (define-wlr-func xdg-surface schedule-configure :uint32)
 
