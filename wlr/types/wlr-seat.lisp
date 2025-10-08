@@ -10,6 +10,9 @@
   (:count :int))
 
 (defcstruct primary-selection-source)
+(defcstruct seat)
+(defcstruct data-source)
+(defcstruct drag)
 
 (define-wlr-events-struct seat-client destroy)
 
