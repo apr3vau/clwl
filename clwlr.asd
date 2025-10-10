@@ -7,6 +7,7 @@
                ;; Util
                (:file "wlr/util/box")
                (:file "wlr/util/log")
+               (:file "wlr/util/edges")
                (:file "wlr/util/addon")
                ;; Render
                (:file "wlr/render/pass")
